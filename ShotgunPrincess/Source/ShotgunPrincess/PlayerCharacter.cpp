@@ -2,7 +2,7 @@
 
 #include "ShotgunPrincess.h"
 #include "PlayerCharacter.h"
-
+#include "TestProjectile.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -33,7 +33,8 @@ APlayerCharacter::APlayerCharacter()
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
     Camera->bUsePawnControlRotation = false;
-
+    
+    bUsingMotionControllers = false;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -70,12 +71,39 @@ void APlayerCharacter::LookUpAtRate(float Rate) {
     }
 }
 
+void APlayerCharacter::OnFire() {
+    UE_LOG(LogTemp, Log, TEXT("FIRING"));
+    if (ProjectileClass != NULL)
+    {
+        UWorld* const World = GetWorld();
+        if (World != NULL) {
+            if (bUsingMotionControllers)
+            {
+                const FRotator SpawnRotation = GetActorRotation();
+                const FVector SpawnLocation = GetActorLocation();
+                World->SpawnActor<ATestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+            } else {
+                const FRotator SpawnRotation = GetActorRotation();
+                const FVector SpawnLocation = GetActorLocation();
+                World->SpawnActor<ATestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+            }
+        }
+    }
+}
+
+void APlayerCharacter::OnStopFire() {
+    // does nothing for now
+}
+
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     check(PlayerInputComponent);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+    
+    PlayerInputComponent->BindAction("FirePrimary", IE_Pressed, this, &APlayerCharacter::OnFire);
+    PlayerInputComponent->BindAction("FirePrimary", IE_Released, this, &APlayerCharacter::OnStopFire);
     
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
@@ -86,5 +114,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+    
+    
 }
 

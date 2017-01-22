@@ -14,18 +14,35 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     class USpringArmComponent* CameraBoom;
     
+    // The Camera
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     class UCameraComponent* Camera;
-
+    
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
+    // Turn speed
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     float BaseTurnRate;
     
+    // Lookup speed
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     float BaseLookUpRate;
+    
+    // Projectile class to spawn
+    UPROPERTY(EditDefaultsOnly, Category=Projectile)
+    TSubclassOf<class ATestProjectile> ProjectileClass;
+    
+    // Whether to use motion controller location for aiming (Once actual animations are created)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+    uint32 bUsingMotionControllers : 1;
+    
+    // Called for pressing the fire button
+    void OnFire();
+    
+    // Called for releasing the fire button
+    void OnStopFire();
     
     // Called for vertical input
     void MoveForward(float Value);
