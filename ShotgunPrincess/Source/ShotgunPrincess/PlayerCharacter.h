@@ -43,6 +43,9 @@ public:
     
     // Called for releasing the fire button
     void OnStopFire();
+
+	// Called on the shift button being pressed
+	void Dash();
     
     // Called for vertical input
     void MoveForward(float Value);
