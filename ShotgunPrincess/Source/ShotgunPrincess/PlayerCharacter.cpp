@@ -2,7 +2,7 @@
 
 #include "ShotgunPrincess.h"
 #include "PlayerCharacter.h"
-#include "TestProjectile.h"
+#include "Projectile.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -81,11 +81,11 @@ void APlayerCharacter::OnFire() {
             {
                 const FRotator SpawnRotation = GetActorRotation();
                 const FVector SpawnLocation = GetActorLocation();
-                World->SpawnActor<ATestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+                World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
             } else {
                 const FRotator SpawnRotation = GetActorRotation();
                 const FVector SpawnLocation = GetActorLocation();
-                World->SpawnActor<ATestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+                World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
             }
         }
     }

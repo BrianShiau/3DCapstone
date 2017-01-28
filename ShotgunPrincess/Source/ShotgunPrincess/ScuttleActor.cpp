@@ -8,10 +8,7 @@
 AScuttleActor::AScuttleActor()
 {
     // Specify that there will be a tick method
-	/*PrimaryActorTick.bCanEverTick = true;
-    
-    // Get the Player Character from the world
-    PlayerCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	PrimaryActorTick.bCanEverTick = true;
 
     TimeTillMove = 3.f;
     Accuracy = 0.f;
@@ -21,21 +18,21 @@ AScuttleActor::AScuttleActor()
     
     CurrentTimeToMove = TimeTillMove;
     CurrentTimeToFire = FireRate;
-    bPlayerInRange = true;*/
+    bPlayerInRange = true;
 }
 
 // Called every frame
 void AScuttleActor::Tick( float DeltaTime )
 {
-	//Super::Tick( DeltaTime );
+	Super::Tick( DeltaTime );
     
-    //CurrentTimeToMove -= DeltaTime;
+    CurrentTimeToMove -= DeltaTime;
     
-    //if (bPlayerInRange) CurrentTimeToFire -= DeltaTime;
+    if (bPlayerInRange) CurrentTimeToFire -= DeltaTime;
     
-    //if (CurrentTimeToMove < 0.f) Move();
+    if (CurrentTimeToMove < 0.f) Move();
     
-    //if (CurrentTimeToFire < 0.f) OnFire();
+    if (CurrentTimeToFire < 0.f) OnFire();
 }
 
 // Creates the sight range
@@ -44,7 +41,7 @@ void AScuttleActor::BeginPlay() {
 }
 
 // logic for spawning a projectile actor and setting its inital conditions
-/*void AScuttleActor::OnFire() {
+void AScuttleActor::OnFire() {
     // to be implemented
     
     CurrentTimeToFire = FireRate;
@@ -59,10 +56,10 @@ void AScuttleActor::Move() {
     // to be implemented
     
     CurrentTimeToMove = TimeTillMove;
-}*/
+}
 
-//FVector AScuttleActor::Aim() {
-//    // to be implemented
-//
-//    return FVector(0.f, 1.f, 0.f);
-//}
+FVector AScuttleActor::Aim() {
+    // to be implemented
+
+    return FVector(0.f, 1.f, 0.f);
+}

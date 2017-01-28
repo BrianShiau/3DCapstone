@@ -10,14 +10,16 @@ class SHOTGUNPRINCESS_API AScuttleActor : public AActor
 {
 	GENERATED_BODY()
     
-    //UPROPERTY(VisibleDefaultsOnly)
-    //class USphereComponent* SightRange;
-    
-    //class ACharacter* PlayerCharacter;
+    UPROPERTY(VisibleDefaultsOnly)
+    class USphereComponent* SightRange;
 	
 public:
+
+	// Set in BluePrints
+	UPROPERTY(EditAnywhere)
+	class ACharacter* PlayerCharacter;
     
-    /*UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere)
     float TimeTillMove;
     
     UPROPERTY(EditAnywhere)
@@ -30,14 +32,14 @@ public:
     FVector WallNormal;
     
     UPROPERTY(EditAnywhere)
-    float RangeRadius;*/
+    float RangeRadius;
     
     // Set in BluePrints
-    //UPROPERTY(EditDefaultsOnly, Category=Projectile)
-    //TSubclassOf<class AProjectile> ProjectileClass;
+    UPROPERTY(EditDefaultsOnly, Category=Projectile)
+    TSubclassOf<class AProjectile> ProjectileClass;
     
     // modifiers
-    /*float CurrentTimeToMove;
+    float CurrentTimeToMove;
     float CurrentTimeToFire;
     bool bPlayerInRange;
     
@@ -45,9 +47,9 @@ public:
     
     void OnStopFire();
     
-    void Move();*/
+    void Move();
     
-    //FVector Aim();
+    FVector Aim();
     
 	// Sets default values for this actor's properties
 	AScuttleActor();
@@ -59,5 +61,5 @@ public:
     virtual void BeginPlay() override;
 
     // Getter Methods
-    //FORCEINLINE class USphereComponent* GetSightRange() const { return SightRange; }
+    FORCEINLINE class USphereComponent* GetSightRange() const { return SightRange; }
 };

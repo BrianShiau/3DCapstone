@@ -29,10 +29,10 @@ public:
     // Lookup speed
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     float BaseLookUpRate;
-    
+
     // Projectile class to spawn
-    UPROPERTY(EditDefaultsOnly, Category=Projectile)
-    TSubclassOf<class ATestProjectile> ProjectileClass;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<class AProjectile> ProjectileClass;
     
     // Whether to use motion controller location for aiming (Once actual animations are created)
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
