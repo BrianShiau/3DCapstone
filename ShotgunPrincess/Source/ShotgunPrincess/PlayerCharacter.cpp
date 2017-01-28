@@ -95,6 +95,21 @@ void APlayerCharacter::OnStopFire() {
     // does nothing for now
 }
 
+void APlayerCharacter::Dash() {
+	if (nullptr != InputComponent) {
+		const float movementDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
+		/*
+		if (1.0f == movementDirection) {
+			UE_LOG(LogTemp, Log, TEXT("SHIFT MOVE RIGHT"));
+			MoveForward(20000.0f);
+		} else if (-1.0f == movementDirection) {
+			UE_LOG(LogTemp, Log, TEXT("SHIFT MOVE LEFT"));
+			MoveForward(-20000.0f);
+		}
+		*/
+	}
+}
+
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -107,6 +122,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &APlayerCharacter::Dash);
     
     // turn is for mouse
     // turn rate is for joystick
