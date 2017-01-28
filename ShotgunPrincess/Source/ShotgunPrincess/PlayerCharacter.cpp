@@ -3,6 +3,7 @@
 #include "ShotgunPrincess.h"
 #include "PlayerCharacter.h"
 #include "Projectile.h"
+#include "PlayerInventory.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -33,6 +34,9 @@ APlayerCharacter::APlayerCharacter()
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
     Camera->bUsePawnControlRotation = false;
+
+	// Create the Player's Inventory
+	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
     
     bUsingMotionControllers = false;
 }

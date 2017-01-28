@@ -17,6 +17,10 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
     // The Camera
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     class UCameraComponent* Camera;
+
+	// The Player's Inventory
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UPlayerInventory* PlayerInventory;
     
 public:
 	// Sets default values for this character's properties
