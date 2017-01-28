@@ -67,3 +67,7 @@ ShotgunPrincess/Intermediate/*
 
 # Cache files for the editor to use
 ShotgunPrincess/DerivedDataCache/*
+
+# ignore individual debug state and userstate
+ShotgunPrincess/ShotgunPrincess.xcworkspace/xcuserdata/ZackMisso.xcuserdatad/xcdebugger/*
+ShotgunPrincess/ShotgunPrincess.xcworkspace/xcuserdata/ZackMisso.xcuserdatad/UserInterfaceState.xcuserstate
