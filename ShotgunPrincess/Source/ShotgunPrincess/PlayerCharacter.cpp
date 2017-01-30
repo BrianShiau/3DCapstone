@@ -146,4 +146,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::TakeDamage(int damage) {
 	UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
 	Health -= damage;
+	if (Health <= 0) {
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+	}
 }

@@ -48,7 +48,6 @@ void ABasicBrazier::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPri
 			if (player) {
 				player->TakeDamage(1);
 			}
-			//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 		}
 	}
 }
@@ -56,7 +55,6 @@ void ABasicBrazier::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPri
 void ABasicBrazier::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult){
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL)) {
 		if (OtherActor->IsA(APlayerCharacter::StaticClass())) {
-			UE_LOG(LogTemp, Log, TEXT("ENTER"));
 			APlayerCharacter *player = Cast<APlayerCharacter>(OtherActor);
 			if (player) {
 				burn = true;
@@ -69,7 +67,6 @@ void ABasicBrazier::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 void ABasicBrazier::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL)) {
 		if (OtherActor->IsA(APlayerCharacter::StaticClass())) {
-			UE_LOG(LogTemp, Log, TEXT("EXIT"));
 			APlayerCharacter *player = Cast<APlayerCharacter>(OtherActor);
 			if (player) {
 				burn = false;
