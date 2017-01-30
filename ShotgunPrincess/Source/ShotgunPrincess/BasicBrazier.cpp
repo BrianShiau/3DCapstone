@@ -36,11 +36,14 @@ void ABasicBrazier::Tick( float DeltaTime )
 }
 
 void ABasicBrazier::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) {
-	//Test for player eventually?
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL)) {
 		if (OtherActor->IsA(APlayerCharacter::StaticClass())) {
 			//UE_LOG(LogTemp, Log, TEXT("FIIIRE"));
-			UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+			APlayerCharacter *player = Cast<APlayerCharacter>(OtherActor);
+			if (player) {
+				player->TakeDamage(1);
+			}
+			//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 		}
 	}
 }
