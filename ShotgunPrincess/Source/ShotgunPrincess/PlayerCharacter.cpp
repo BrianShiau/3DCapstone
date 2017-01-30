@@ -39,6 +39,9 @@ APlayerCharacter::APlayerCharacter()
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
     
     bUsingMotionControllers = false;
+
+	// Set the Player's default health
+	Health = 100;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -139,3 +142,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     
 }
 
+// Causes the Player to take damage
+void APlayerCharacter::TakeDamage(int damage) {
+	UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
+	Health -= damage;
+	if (Health <= 0) {
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+	}
+}

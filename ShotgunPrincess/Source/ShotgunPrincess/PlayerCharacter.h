@@ -21,6 +21,10 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	// The Player's Inventory
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UPlayerInventory* PlayerInventory;
+
+	// The Player's Health
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	int Health;
     
 public:
 	// Sets default values for this character's properties
@@ -62,6 +66,9 @@ public:
     
     // Input to look up at a normalized rate (for joystick)
     void LookUpAtRate(float Rate);
+
+	// Causes the Player to take damage
+	void TakeDamage(int damage);
     
 protected:
 	// Called to bind functionality to input
