@@ -23,7 +23,7 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	class UPlayerInventory* PlayerInventory;
 
 	// The Player's Health
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Health;
     
 public:
