@@ -27,7 +27,7 @@ APlayerCharacter::APlayerCharacter()
     // Creates the Camera Boom
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
-    CameraBoom->TargetArmLength = 300.f;
+    CameraBoom->TargetArmLength = 100.f;
     CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
     
     // Create the Camera
