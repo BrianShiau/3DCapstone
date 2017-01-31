@@ -28,7 +28,8 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
     CameraBoom->TargetArmLength = 100.f;
-	CameraBoom->SocketOffset = FVector(0.f, 55.f, 55.f); //Setting the Relative Location Z value didnt work so I put that value in the socket offset. The Y value is correct.
+	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f); //Setting the Relative Location Z value didnt work so I put that value in the socket offset. The Y value is correct.
+	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
     CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
     
     // Create the Camera
