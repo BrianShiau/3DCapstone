@@ -2,7 +2,7 @@
 
 #include "ShotgunPrincess.h"
 #include "Projectile.h"
-
+#include "PlayerCharacter.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -45,9 +45,8 @@ AProjectile::AProjectile()
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) {
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics()) {
+	if ((OtherActor != NULL) && (OtherActor != this) && (Cast<APlayerCharacter>(OtherActor) == PlayerReference) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics()) {
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.f, GetActorLocation());
 		Destroy();
 	}
 }
-

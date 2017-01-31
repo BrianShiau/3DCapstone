@@ -38,6 +38,10 @@ public:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
   float BaseLookUpRate;
 
+	// Temporary Variable to offset Projectile
+	UPROPERTY(EditAnywhere)
+	float ProjectileOffset;
+
   // Projectile class to spawn
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TSubclassOf<class AProjectile> ProjectileClass;
