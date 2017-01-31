@@ -9,21 +9,21 @@
 APlayerCharacter::APlayerCharacter()
 {
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.f);
-    
+
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
-    
+
     // Player controllers are used to control Pawns if specified to true
     bUseControllerRotationPitch = false;
     bUseControllerRotationRoll = false;
     bUseControllerRotationYaw = false;
-    
+
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
     GetCharacterMovement()->JumpZVelocity = 600.f;
     GetCharacterMovement()->AirControl = 0.2f;
-    
+
     // Creates the Camera Boom
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
@@ -31,7 +31,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f); //Setting the Relative Location Z value didnt work so I put that value in the socket offset. The Y value is correct.
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
     CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
-    
+
     // Create the Camera
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
@@ -39,7 +39,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Create the Player's Inventory
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
-    
+
     bUsingMotionControllers = false;
 
 	// Set the Player's default health
@@ -125,27 +125,27 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     check(PlayerInputComponent);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-    
+
     PlayerInputComponent->BindAction("FirePrimary", IE_Pressed, this, &APlayerCharacter::OnFire);
     PlayerInputComponent->BindAction("FirePrimary", IE_Released, this, &APlayerCharacter::OnStopFire);
-    
+
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &APlayerCharacter::Dash);
-    
+
     // turn is for mouse
     // turn rate is for joystick
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
-    
-    
+
+
 }
 
 // Causes the Player to take damage
-void APlayerCharacter::TakeDamage(int damage) {
+void APlayerCharacter::PlayerTakeDamage(int damage) {
 	UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
 	Health -= damage;
 	if (Health <= 0) {
