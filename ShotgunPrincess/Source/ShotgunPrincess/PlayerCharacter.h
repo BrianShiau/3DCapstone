@@ -26,6 +26,10 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Health;
 
+	// The Player's Max Health
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	int MaxHealth;
+
 	// Time player since the player last lost health
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float TimeSinceHealthLoss;

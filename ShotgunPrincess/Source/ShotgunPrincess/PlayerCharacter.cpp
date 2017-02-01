@@ -59,7 +59,8 @@ APlayerCharacter::APlayerCharacter()
     bUsingMotionControllers = false;
 
 	// Set the Player's default health
-	Health = 100;
+	MaxHealth = 100;
+	Health = MaxHealth;
 	TimeSinceHealthLoss = 100;
 }
 
