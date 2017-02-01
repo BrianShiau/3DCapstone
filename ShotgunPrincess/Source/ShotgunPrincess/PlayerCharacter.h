@@ -8,7 +8,7 @@
 UCLASS()
 class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 {
-	GENERATED_BODY()
+  GENERATED_BODY()
 
   // Camera boom for positioning
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -29,6 +29,10 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	// Time player last used dash
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float dashLastUsed;
+
+	// Camera Sphere Collider
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* CameraSphere;
 
 public:
 	// Sets default values for this character's properties
@@ -76,7 +80,11 @@ public:
   void LookUpAtRate(float Rate);
 
 	// Causes the Player to take damage
-	void PlayerTakeDamage(int damage);
+  void PlayerTakeDamage(int damage);
+
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
+
 
 protected:
 	// Called to bind functionality to input
