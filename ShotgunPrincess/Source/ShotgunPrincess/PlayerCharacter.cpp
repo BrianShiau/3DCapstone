@@ -194,5 +194,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 	}
 
 	TimeSinceHealthLoss += GetWorld()->GetDeltaSeconds();
+
+	if (TimeSinceHealthLoss > 3 && Health < MaxHealth) {
+		Health++;
+	}
 }
 
