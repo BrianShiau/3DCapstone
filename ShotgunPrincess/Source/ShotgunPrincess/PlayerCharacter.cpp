@@ -5,6 +5,11 @@
 #include "Projectile.h"
 #include "PlayerInventory.h"
 
+namespace {
+	const FVector kBaseDashVector = FVector(0, 4000, 0);
+	const FVector kUpgradedDashVector = FVector(0, 4000, 0);
+}
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -105,18 +110,17 @@ void APlayerCharacter::OnStopFire() {
 }
 
 void APlayerCharacter::Dash() {
-	if (nullptr != InputComponent) {
-		const float movementDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
-		/*
-		if (1.0f == movementDirection) {
-			UE_LOG(LogTemp, Log, TEXT("SHIFT MOVE RIGHT"));
-			MoveForward(20000.0f);
-		} else if (-1.0f == movementDirection) {
-			UE_LOG(LogTemp, Log, TEXT("SHIFT MOVE LEFT"));
-			MoveForward(-20000.0f);
-		}
-		*/
+
+	const APlayerController* playerController = Cast<APlayerController>(GetController());
+	if (nullptr != InputComponent && nullptr != playerController) {
+		// Grab axis of movement on Y, value either -1.0f or 1.0f on keyboard. When controller added, need to update.
+		const float dashDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
+		// Get Player movement component
+		UCharacterMovementComponent* const movementComponent = playerController->GetCharacter()->GetCharacterMovement();
+		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
+		movementComponent->Launch(dashDirection * kBaseDashVector);
 	}
+
 }
 
 // Called to bind functionality to input
