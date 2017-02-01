@@ -71,10 +71,6 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TSubclassOf<class AProjectile> ProjectileClass;
 
-  // Whether to use motion controller location for aiming (Once actual animations are created)
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-  uint32 bUsingMotionControllers : 1;
-
   // Called for pressing the fire button
   void OnFire();
 

@@ -17,7 +17,7 @@ APlayerCharacter::APlayerCharacter()
 {
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.f);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Overlap);
-    
+
 
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
@@ -40,7 +40,7 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
     CameraBoom->TargetArmLength = 100.f;
-	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f); 
+	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f);
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
     CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
 
@@ -56,8 +56,6 @@ APlayerCharacter::APlayerCharacter()
 
 	// Create the Player's Inventory
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
-
-    bUsingMotionControllers = false;
 
 	// Set the Player's default health
 	Health = 100;
@@ -110,22 +108,14 @@ void APlayerCharacter::OnFire() {
     {
         UWorld* const World = GetWorld();
         if (World != NULL) {
-
-            if (bUsingMotionControllers)
-            {
-                //const FRotator SpawnRotation = GetActorRotation();
-                const FRotator SpawnRotation = GetControlRotation();
-                const FVector SpawnLocation = GetActorLocation();
-                World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-            } else {
-                //const FRotator SpawnRotation = GetActorRotation();
-                const FRotator SpawnRotation = GetControlRotation();
-                const FVector SpawnLocation = GetActorLocation();
-                AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
-                bullet->PlayerReference = this;
-            }
+            const FRotator SpawnRotation = GetControlRotation();
+            const FVector SpawnLocation = GetActorLocation();
+            AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+            bullet->PlayerReference = this;
         }
-    }
+    } else {
+			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
+		}
 }
 
 void APlayerCharacter::OnStopFire() {
@@ -166,7 +156,7 @@ void APlayerCharacter::NearDoor(ADoor* someDoor) {
 	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, "Press 'F' to Open the Door");
 	isNearDoor = true;
 	if (someDoor != NULL) {
-		
+
 		aDoor = someDoor;
 	}
 }
@@ -225,4 +215,3 @@ void APlayerCharacter::Tick(float DeltaTime)
 		Health++;
 	}
 }
-

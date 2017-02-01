@@ -3,7 +3,7 @@
 #include "ShotgunPrincess.h"
 #include "ScuttleActor.h"
 #include "PlayerCharacter.h"
-//#include "Projectile.h"
+#include "Projectile.h"
 
 // Sets default values
 AScuttleActor::AScuttleActor()
@@ -19,7 +19,7 @@ AScuttleActor::AScuttleActor()
     WallNormal = FVector(0.f, 0.f, 1.f);
     RangeRadius = -1.f;
 	MaxMoveDistance = 100.f;
-    
+
     CurrentTimeToMove = TimeTillMove;
     CurrentTimeToFire = FireRate;
     bPlayerInRange = true;
@@ -34,6 +34,8 @@ AScuttleActor::AScuttleActor()
 		Mesh->SetRelativeLocation(FVector(0.0f, 0.0f, 30.0f));
 		Mesh->SetWorldScale3D(FVector(20.f));
 	}
+	SetActorScale3D(FVector(20.f, 20.f, 20.f));
+	SetActorRotation(FRotator(90.f, 90.f, 90.f));
 }
 
 // Called every frame
@@ -41,14 +43,14 @@ void AScuttleActor::Tick( float DeltaTime )
 {
 	//UE_LOG(LogTemp, Log, TEXT("Current Time Till Move Is: %f"), CurrentTimeToMove);
 	Super::Tick( DeltaTime );
-    
+
     CurrentTimeToMove -= DeltaTime;
 	//UE_LOG(LogTemp, Log, TEXT("Current Time Till Move Is: %f"), CurrentTimeToMove);
-    
+
     if (bPlayerInRange) CurrentTimeToFire -= DeltaTime;
-    
+
     if (CurrentTimeToMove < 0.f) Move();
-    
+
     if (CurrentTimeToFire < 0.f) OnFire();
 }
 
@@ -71,8 +73,21 @@ void AScuttleActor::BeginPlay() {
 
 // logic for spawning a projectile actor and setting its inital conditions
 void AScuttleActor::OnFire() {
-    // to be implemented
-    
+		UE_LOG(LogTemp, Log, TEXT("Scuttle FIRING"));
+		if (ProjectileClass != NULL)
+		{
+				UWorld* const World = GetWorld();
+				if (World != NULL) {
+						float ProjectileOffset = 1.0f;
+						const FRotator SpawnRotation = GetActorRotation();
+						const FVector SpawnLocation = GetActorLocation() + FVector(0.f, 0.f, 18.f);
+						AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+						bullet->PlayerReference = NULL;
+				}
+		} else {
+			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
+		}
+
     CurrentTimeToFire = FireRate;
 }
 
@@ -84,7 +99,7 @@ void AScuttleActor::OnStopFire() {
 void AScuttleActor::Move() {
 	UE_LOG(LogTemp, Log, TEXT("EnemyMoving"));
 	FVector MovementPlane = FVector(1.f, 1.f, 1.f);
-	
+
 	// Reduce the directions the enemy can move to only the plane it is standing one
 	if (WallNormal[0] >= 0.f && WallNormal[1] >= 0.f && WallNormal[2] >= 0.f) {
 		MovementPlane -= WallNormal;
@@ -109,7 +124,7 @@ void AScuttleActor::Move() {
 	// TODO :: use interpolation to make movement smooth
 
 	SetActorLocation(GetActorLocation() + MovementPlane);
-    
+
     CurrentTimeToMove = TimeTillMove;
 }
 
