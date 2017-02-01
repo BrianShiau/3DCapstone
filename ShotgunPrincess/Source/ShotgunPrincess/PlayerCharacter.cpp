@@ -33,7 +33,7 @@ APlayerCharacter::APlayerCharacter()
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
-    GetCharacterMovement()->JumpZVelocity = 600.f;
+    GetCharacterMovement()->JumpZVelocity = 300.f;
     GetCharacterMovement()->AirControl = 0.2f;
 
     // Creates the Camera Boom
@@ -74,7 +74,7 @@ void APlayerCharacter::MoveForward(float Value) {
         const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
         const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
         AddMovementInput(Forward, Value);
-        UE_LOG(LogTemp, Log, TEXT("MOVING FORWARD"));
+        //UE_LOG(LogTemp, Log, TEXT("MOVING FORWARD"));
     }
 }
 
@@ -84,26 +84,26 @@ void APlayerCharacter::MoveRight(float Value) {
         const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
         const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
         AddMovementInput(Forward, Value);
-        UE_LOG(LogTemp, Log, TEXT("MOVING RIGHT"));
+        //UE_LOG(LogTemp, Log, TEXT("MOVING RIGHT"));
     }
 }
 
 void APlayerCharacter::TurnAtRate(float Rate) {
     if (Rate != 0.f) {
-        UE_LOG(LogTemp, Log, TEXT("TURNING"));
+        //UE_LOG(LogTemp, Log, TEXT("TURNING"));
         AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
     }
 }
 
 void APlayerCharacter::LookUpAtRate(float Rate) {
     if (Rate != 0.f) {
-        UE_LOG(LogTemp, Log, TEXT("LOOKING UP"));
+        //UE_LOG(LogTemp, Log, TEXT("LOOKING UP"));
         AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
     }
 }
 
 void APlayerCharacter::OnFire() {
-    UE_LOG(LogTemp, Log, TEXT("FIRING"));
+    //UE_LOG(LogTemp, Log, TEXT("FIRING"));
     if (ProjectileClass != NULL)
     {
         UWorld* const World = GetWorld();

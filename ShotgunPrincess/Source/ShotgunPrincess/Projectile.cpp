@@ -45,22 +45,22 @@ AProjectile::AProjectile()
 	bFiredByPlayer = false;
 
 	// Die After 3 Secs
-	InitialLifeSpan = 3.f;
+	InitialLifeSpan = 6.f;
 
 	this->OnActorHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
 void AProjectile::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit) {
-	UE_LOG(LogTemp, Log, TEXT("WHATA"));
+	//UE_LOG(LogTemp, Log, TEXT("WHATA"));
 	if ((OtherActor != NULL) && (OtherActor != this) && (SelfActor != NULL)) {
 		if (!bFiredByPlayer && OtherActor == PlayerReference) {
-			PlayerReference->PlayerTakeDamage(1);
+			PlayerReference->PlayerTakeDamage(10);
 			Destroy();
-			UE_LOG(LogTemp, Log, TEXT("Player Hit"));
+			//UE_LOG(LogTemp, Log, TEXT("Player Hit"));
 		} else {
 			//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.f, GetActorLocation());
 			Destroy();
-			UE_LOG(LogTemp, Log, TEXT("Non Player Hit"));
+			//UE_LOG(LogTemp, Log, TEXT("Non Player Hit"));
 		}
 	}
 }
