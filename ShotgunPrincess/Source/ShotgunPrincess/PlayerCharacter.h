@@ -26,6 +26,10 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Health;
 
+	// Time player last used dash
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float dashLastUsed;
+
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
