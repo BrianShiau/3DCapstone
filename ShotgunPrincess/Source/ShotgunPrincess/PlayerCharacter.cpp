@@ -52,7 +52,7 @@ APlayerCharacter::APlayerCharacter()
 	//Create camera sphere collider
 	CameraSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CameraSphere"));
 	CameraSphere->SetSphereRadius(12.f);
-	CameraSphere->AttachTo(Camera, "Camera");
+	CameraSphere->SetupAttachment(Camera);
 
 	// Create the Player's Inventory
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
@@ -65,6 +65,9 @@ APlayerCharacter::APlayerCharacter()
 	isNearDoor = false;
 	isOpeningDoor = false;
 	aDoor = NULL;
+	MaxHealth = 100;
+	Health = MaxHealth;
+	TimeSinceHealthLoss = 100;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -105,11 +108,14 @@ void APlayerCharacter::OnFire() {
     UE_LOG(LogTemp, Log, TEXT("FIRING"));
     if (ProjectileClass != NULL)
     {
+		UE_LOG(LogTemp, Log, TEXT("NOTNNULL"));
         UWorld* const World = GetWorld();
         if (World != NULL) {
+
             if (bUsingMotionControllers)
             {
                 //const FRotator SpawnRotation = GetActorRotation();
+				UE_LOG(LogTemp, Log, TEXT("WHHATAT"));
                 const FRotator SpawnRotation = GetControlRotation();
                 const FVector SpawnLocation = GetActorLocation();
                 World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
@@ -117,6 +123,7 @@ void APlayerCharacter::OnFire() {
                 //const FRotator SpawnRotation = GetActorRotation();
                 const FRotator SpawnRotation = GetControlRotation();
                 const FVector SpawnLocation = GetActorLocation();
+				UE_LOG(LogTemp, Log, TEXT("SPAWNING"));
                 AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
                 bullet->PlayerReference = this;
             }
@@ -131,13 +138,12 @@ void APlayerCharacter::OnStopFire() {
 void APlayerCharacter::Dash() {
 
 	const APlayerController* playerController = Cast<APlayerController>(GetController());
+	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	if (nullptr != InputComponent && nullptr != playerController && currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
 		// Grab axis of movement on Y, value either -1.0f or 1.0f on keyboard. When controller added, need to update.
 		const float dashDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
-		// Get Player movement component
-		UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 		// Check if player has dash upgrade
 		const bool hasDashUpgrade = PlayerInventory->HasDashBoots;
 		// If has dash upgrade, use upgraded dash vector, else use base dash vector
@@ -197,8 +203,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 // Causes the Player to take damage
 void APlayerCharacter::PlayerTakeDamage(int damage) {
-	UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
+	//UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
 	Health -= damage;
+	TimeSinceHealthLoss = 0;
 	if (Health <= 0) {
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	}
@@ -215,5 +222,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 		GetMesh()->SetOwnerNoSee(false);
 	}
 
+	TimeSinceHealthLoss += GetWorld()->GetDeltaSeconds();
+
+	if (TimeSinceHealthLoss > 3 && Health < MaxHealth) {
+		Health++;
+	}
 }
 
