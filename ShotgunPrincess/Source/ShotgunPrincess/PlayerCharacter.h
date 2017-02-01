@@ -42,6 +42,15 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USphereComponent* CameraSphere;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool isOpeningDoor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool isNearDoor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class ADoor* aDoor;
+
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
@@ -75,6 +84,12 @@ public:
 	// Called on the shift button being pressed
 	void Dash();
 
+  // Called for pressing interaction button
+	void Interact();
+
+	//Called when player is near a door
+	void NearDoor(ADoor* someDoor);
+
   // Called for vertical input
   void MoveForward(float Value);
 
@@ -98,8 +113,10 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-// Getter Methods
+// Getter and Setter Methods
 public:
     FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
     FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
+	FORCEINLINE bool getIsOpeningDoor() { return isOpeningDoor;  }
+	FORCEINLINE void setIsOpeningDoor(bool bDoor) { isOpeningDoor = bDoor; }
 };
