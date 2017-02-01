@@ -9,6 +9,7 @@
 APlayerCharacter::APlayerCharacter()
 {
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.f);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Overlap);
     
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
@@ -28,7 +29,7 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
     CameraBoom->TargetArmLength = 100.f;
-	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f); //Setting the Relative Location Z value didnt work so I put that value in the socket offset. The Y value is correct.
+	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f); 
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
     CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
     
@@ -36,6 +37,11 @@ APlayerCharacter::APlayerCharacter()
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
     Camera->bUsePawnControlRotation = false;
+
+	//Create camera sphere collider
+	CameraSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CameraSphere"));
+	CameraSphere->SetSphereRadius(12.f);
+	CameraSphere->AttachTo(Camera, "Camera");
 
 	// Create the Player's Inventory
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
@@ -151,4 +157,17 @@ void APlayerCharacter::TakeDamage(int damage) {
 	if (Health <= 0) {
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	}
+}
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetCapsuleComponent()->IsOverlappingComponent(CameraSphere)) {
+		GetMesh()->SetOwnerNoSee(true);
+	}
+	else {
+		GetMesh()->SetOwnerNoSee(false);
+	}
+
 }

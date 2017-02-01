@@ -25,6 +25,10 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	// The Player's Health
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int Health;
+
+	// Camera Sphere Collider
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* CameraSphere;
     
 public:
 	// Sets default values for this character's properties
@@ -69,6 +73,9 @@ public:
 
 	// Causes the Player to take damage
 	void TakeDamage(int damage);
+
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
     
 protected:
 	// Called to bind functionality to input
