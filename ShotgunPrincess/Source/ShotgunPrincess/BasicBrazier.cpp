@@ -17,7 +17,7 @@ ABasicBrazier::ABasicBrazier()
 void ABasicBrazier::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// Set up Collision
 	TArray<UStaticMeshComponent*> Components;
 	GetComponents(Components);
@@ -36,7 +36,7 @@ void ABasicBrazier::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 	if (burn && burnTarget) {
-		burnTarget->TakeDamage(1);
+		burnTarget->PlayerTakeDamage(1);
 	}
 }
 
@@ -46,7 +46,7 @@ void ABasicBrazier::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPri
 			//UE_LOG(LogTemp, Log, TEXT("FIIIRE"));
 			APlayerCharacter *player = Cast<APlayerCharacter>(OtherActor);
 			if (player) {
-				player->TakeDamage(1);
+				player->PlayerTakeDamage(1);
 			}
 		}
 	}
