@@ -54,7 +54,7 @@ void AScuttleActor::Tick( float DeltaTime )
     if (CurrentTimeToFire < 0.f) OnFire();
 }
 
-void AScuttleActor::SetReferenceToPlayer(ACharacter* Ref) {
+void AScuttleActor::SetReferenceToPlayer(APlayerCharacter* Ref) {
 	PlayerCharacter = Ref;
 	if (PlayerCharacter != NULL) {
 		UE_LOG(LogTemp, Log, TEXT("SetPlayerCharacter"));
@@ -68,7 +68,7 @@ void AScuttleActor::SetReferenceToPlayer(ACharacter* Ref) {
 void AScuttleActor::BeginPlay() {
 	TArray<AActor*> Actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerCharacter::StaticClass(), Actors);
-	SetReferenceToPlayer((ACharacter*)Actors[0]); // maybe put this in level blueprint later
+	SetReferenceToPlayer((APlayerCharacter*)Actors[0]); // maybe put this in level blueprint later
 }
 
 // logic for spawning a projectile actor and setting its inital conditions
@@ -81,9 +81,10 @@ void AScuttleActor::OnFire() {
 						float ProjectileOffset = 1.0f;
 						const FRotator SpawnRotation = GetActorRotation();
 						const FRotator ScuttleRotator = FRotator(SpawnRotation.Pitch, SpawnRotation.Roll - 90.f, SpawnRotation.Yaw + 0.f);
-						const FVector SpawnLocation = GetActorLocation() + FVector(0.f, 0.f, 18.f);
+						const FVector SpawnLocation = GetActorLocation() + FVector(0.f, 0.f, 50.f);
 						AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + ScuttleRotator.Vector() * ProjectileOffset, ScuttleRotator);
-						bullet->PlayerReference = NULL;
+						bullet->PlayerReference = PlayerCharacter;
+						bullet->bFiredByPlayer = false;
 				}
 		} else {
 			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));

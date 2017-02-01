@@ -20,7 +20,7 @@ public:
 
 	// Set in BluePrints
 	UPROPERTY(EditAnywhere)
-	class ACharacter* PlayerCharacter;
+	class APlayerCharacter* PlayerCharacter;
 
     UPROPERTY(EditAnywhere)
     float TimeTillMove;
@@ -61,7 +61,7 @@ public:
 	AScuttleActor();
 
 	UFUNCTION(BlueprintCallable, Category="Initialize")
-	void SetReferenceToPlayer(ACharacter* Ref);
+	void SetReferenceToPlayer(APlayerCharacter* Ref);
 
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
