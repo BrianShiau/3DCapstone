@@ -12,6 +12,9 @@ class SHOTGUNPRINCESS_API AScuttleActor : public AActor
     
     UPROPERTY(VisibleDefaultsOnly)
     class USphereComponent* SightRange;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* Mesh;
 	
 public:
 
@@ -30,6 +33,9 @@ public:
     
     UPROPERTY(EditAnywhere)
     FVector WallNormal;
+
+	UPROPERTY(EditAnywhere)
+	float MaxMoveDistance;
     
     UPROPERTY(EditAnywhere)
     float RangeRadius;
@@ -53,6 +59,9 @@ public:
     
 	// Sets default values for this actor's properties
 	AScuttleActor();
+
+	UFUNCTION(BlueprintCallable, Category="Initialize")
+	void SetReferenceToPlayer(ACharacter* Ref);
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
@@ -62,4 +71,5 @@ public:
 
     // Getter Methods
     FORCEINLINE class USphereComponent* GetSightRange() const { return SightRange; }
+	FORCEINLINE class UStaticMeshComponent* GetMesh() const { return Mesh; }
 };

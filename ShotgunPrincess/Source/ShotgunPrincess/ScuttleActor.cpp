@@ -2,6 +2,7 @@
 
 #include "ShotgunPrincess.h"
 #include "ScuttleActor.h"
+#include "PlayerCharacter.h"
 //#include "Projectile.h"
 
 // Sets default values
@@ -9,24 +10,40 @@ AScuttleActor::AScuttleActor()
 {
     // Specify that there will be a tick method
 	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+	PrimaryActorTick.bAllowTickOnDedicatedServer = true;
 
     TimeTillMove = 3.f;
     Accuracy = 0.f;
     FireRate = 5.f;
     WallNormal = FVector(0.f, 0.f, 1.f);
     RangeRadius = -1.f;
+	MaxMoveDistance = 100.f;
     
     CurrentTimeToMove = TimeTillMove;
     CurrentTimeToFire = FireRate;
     bPlayerInRange = true;
+
+	// Set up the Mesh
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> VisualAsset(TEXT("/Game/Models/ScuttleOBJTest.ScuttleOBJTest"));
+	if (VisualAsset.Succeeded())
+	{
+		Mesh->SetStaticMesh(VisualAsset.Object);
+		Mesh->SetRelativeLocation(FVector(0.0f, 0.0f, 30.0f));
+		Mesh->SetWorldScale3D(FVector(20.f));
+	}
 }
 
 // Called every frame
 void AScuttleActor::Tick( float DeltaTime )
 {
+	//UE_LOG(LogTemp, Log, TEXT("Current Time Till Move Is: %f"), CurrentTimeToMove);
 	Super::Tick( DeltaTime );
     
     CurrentTimeToMove -= DeltaTime;
+	//UE_LOG(LogTemp, Log, TEXT("Current Time Till Move Is: %f"), CurrentTimeToMove);
     
     if (bPlayerInRange) CurrentTimeToFire -= DeltaTime;
     
@@ -35,9 +52,21 @@ void AScuttleActor::Tick( float DeltaTime )
     if (CurrentTimeToFire < 0.f) OnFire();
 }
 
+void AScuttleActor::SetReferenceToPlayer(ACharacter* Ref) {
+	PlayerCharacter = Ref;
+	if (PlayerCharacter != NULL) {
+		UE_LOG(LogTemp, Log, TEXT("SetPlayerCharacter"));
+	}
+	else {
+		UE_LOG(LogTemp, Log, TEXT("EveryThingISBROKEN"));
+	}
+}
+
 // Creates the sight range
 void AScuttleActor::BeginPlay() {
-    // to be implemented
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerCharacter::StaticClass(), Actors);
+	SetReferenceToPlayer((ACharacter*)Actors[0]); // maybe put this in level blueprint later
 }
 
 // logic for spawning a projectile actor and setting its inital conditions
@@ -53,7 +82,33 @@ void AScuttleActor::OnStopFire() {
 }
 
 void AScuttleActor::Move() {
-    // to be implemented
+	UE_LOG(LogTemp, Log, TEXT("EnemyMoving"));
+	FVector MovementPlane = FVector(1.f, 1.f, 1.f);
+	
+	// Reduce the directions the enemy can move to only the plane it is standing one
+	if (WallNormal[0] >= 0.f && WallNormal[1] >= 0.f && WallNormal[2] >= 0.f) {
+		MovementPlane -= WallNormal;
+	}
+	else {
+		MovementPlane += WallNormal;
+	}
+
+	// get the distance to move in both directions along the plane
+	float AxisOne = FMath::RandRange(0.f, MaxMoveDistance);
+	float AxisTwo = MaxMoveDistance - AxisOne;
+
+	if (FMath::RandBool()) AxisOne *= -1.f;
+	if (FMath::RandBool()) AxisTwo *= -1.f;
+
+	if (MovementPlane[0] == 0.f) MovementPlane[1] = AxisOne;
+	else MovementPlane[0] = AxisOne;
+
+	if (MovementPlane[2] == 0.f) MovementPlane[1] = AxisTwo;
+	else MovementPlane[2] = AxisTwo;
+
+	// TODO :: use interpolation to make movement smooth
+
+	SetActorLocation(GetActorLocation() + MovementPlane);
     
     CurrentTimeToMove = TimeTillMove;
 }

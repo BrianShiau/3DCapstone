@@ -102,14 +102,12 @@ void APlayerCharacter::OnFire() {
     UE_LOG(LogTemp, Log, TEXT("FIRING"));
     if (ProjectileClass != NULL)
     {
-		UE_LOG(LogTemp, Log, TEXT("NOTNNULL"));
         UWorld* const World = GetWorld();
         if (World != NULL) {
 
             if (bUsingMotionControllers)
             {
                 //const FRotator SpawnRotation = GetActorRotation();
-				UE_LOG(LogTemp, Log, TEXT("WHHATAT"));
                 const FRotator SpawnRotation = GetControlRotation();
                 const FVector SpawnLocation = GetActorLocation();
                 World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
@@ -117,7 +115,6 @@ void APlayerCharacter::OnFire() {
                 //const FRotator SpawnRotation = GetActorRotation();
                 const FRotator SpawnRotation = GetControlRotation();
                 const FVector SpawnLocation = GetActorLocation();
-				UE_LOG(LogTemp, Log, TEXT("SPAWNING"));
                 AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
                 bullet->PlayerReference = this;
             }
