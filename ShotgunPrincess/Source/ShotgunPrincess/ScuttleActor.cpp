@@ -80,8 +80,9 @@ void AScuttleActor::OnFire() {
 				if (World != NULL) {
 						float ProjectileOffset = 1.0f;
 						const FRotator SpawnRotation = GetActorRotation();
+						const FRotator ScuttleRotator = FRotator(SpawnRotation.Pitch, SpawnRotation.Roll - 90.f, SpawnRotation.Yaw + 0.f);
 						const FVector SpawnLocation = GetActorLocation() + FVector(0.f, 0.f, 18.f);
-						AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+						AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + ScuttleRotator.Vector() * ProjectileOffset, ScuttleRotator);
 						bullet->PlayerReference = NULL;
 				}
 		} else {
