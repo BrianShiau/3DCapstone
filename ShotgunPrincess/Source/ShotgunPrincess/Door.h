@@ -9,6 +9,9 @@ UCLASS()
 class SHOTGUNPRINCESS_API ADoor : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class APlayerCharacter* Interactor;
 	
 public:	
 	// Sets default values for this actor's properties
