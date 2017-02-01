@@ -60,6 +60,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Set the Player's default health
 	Health = 100;
+	TimeSinceHealthLoss = 100;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -172,8 +173,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 // Causes the Player to take damage
 void APlayerCharacter::PlayerTakeDamage(int damage) {
-	UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
+	//UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
 	Health -= damage;
+	TimeSinceHealthLoss = 0;
 	if (Health <= 0) {
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	}
@@ -190,5 +192,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 		GetMesh()->SetOwnerNoSee(false);
 	}
 
+	TimeSinceHealthLoss += GetWorld()->GetDeltaSeconds();
 }
 
