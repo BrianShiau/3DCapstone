@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "Projectile.h"
 #include "PlayerInventory.h"
+#include "Door.h"
 
 namespace {
 	const FVector kBaseDashVector = FVector(0, 4000, 0);
@@ -60,6 +61,10 @@ APlayerCharacter::APlayerCharacter()
 
 	// Set the Player's default health
 	Health = 100;
+
+	isNearDoor = false;
+	isOpeningDoor = false;
+	aDoor = NULL;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -145,6 +150,24 @@ void APlayerCharacter::Dash() {
 
 }
 
+void APlayerCharacter::Interact() {
+
+	if (isNearDoor) {
+		// Open the Door
+		isOpeningDoor = true;
+		isNearDoor = false;
+	}
+}
+
+void APlayerCharacter::NearDoor(ADoor* someDoor) {
+	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, "Press 'F' to Open the Door");
+	isNearDoor = true;
+	if (someDoor != NULL) {
+		
+		aDoor = someDoor;
+	}
+}
+
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -159,6 +182,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &APlayerCharacter::Dash);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 
     // turn is for mouse
     // turn rate is for joystick
