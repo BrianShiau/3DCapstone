@@ -7,7 +7,8 @@
 
 namespace {
 	const FVector kBaseDashVector = FVector(0, 4000, 0);
-	const FVector kUpgradedDashVector = FVector(0, 4000, 0);
+	const FVector kUpgradedDashVector = FVector(0, 0, 4000);
+	const float dashCooldown = 2.0f;
 }
 
 // Sets default values
@@ -20,6 +21,8 @@ APlayerCharacter::APlayerCharacter()
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
     ProjectileOffset = 100.f;
+
+	dashLastUsed = 0.f;
 
     // Player controllers are used to control Pawns if specified to true
     bUseControllerRotationPitch = false;
@@ -123,13 +126,21 @@ void APlayerCharacter::OnStopFire() {
 void APlayerCharacter::Dash() {
 
 	const APlayerController* playerController = Cast<APlayerController>(GetController());
-	if (nullptr != InputComponent && nullptr != playerController) {
+	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
+	const float currentTime = GetWorld()->GetTimeSeconds();
+	if (nullptr != InputComponent && nullptr != playerController && currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
 		// Grab axis of movement on Y, value either -1.0f or 1.0f on keyboard. When controller added, need to update.
 		const float dashDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
 		// Get Player movement component
-		UCharacterMovementComponent* const movementComponent = playerController->GetCharacter()->GetCharacterMovement();
+		UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
+		// Check if player has dash upgrade
+		const bool hasDashUpgrade = PlayerInventory->HasDashBoots;
+		// If has dash upgrade, use upgraded dash vector, else use base dash vector
+		const FVector dashVector = hasDashUpgrade ? kUpgradedDashVector : kBaseDashVector;
 		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
-		movementComponent->Launch(dashDirection * kBaseDashVector);
+		movementComponent->Launch(dashDirection * dashVector);
+		// Set the dash last used time
+		dashLastUsed = currentTime;
 	}
 
 }
