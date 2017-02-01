@@ -22,6 +22,10 @@ class SHOTGUNPRINCESS_API AProjectile : public AActor
 	class UStaticMeshComponent* SphereMesh;
 
 public:
+	// Hacky Solution to player projectile impulse bug
+	UPROPERTY(EditAnywhere)
+	class APlayerCharacter* PlayerReference;
+
 	// Sets default values for this actor's properties
 	AProjectile();
 

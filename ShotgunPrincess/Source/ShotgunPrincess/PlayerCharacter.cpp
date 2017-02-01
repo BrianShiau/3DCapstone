@@ -17,6 +17,7 @@ APlayerCharacter::APlayerCharacter()
 
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
+    ProjectileOffset = 100.f;
 
     // Player controllers are used to control Pawns if specified to true
     bUseControllerRotationPitch = false;
@@ -93,13 +94,16 @@ void APlayerCharacter::OnFire() {
         if (World != NULL) {
             if (bUsingMotionControllers)
             {
-                const FRotator SpawnRotation = GetActorRotation();
+                //const FRotator SpawnRotation = GetActorRotation();
+                const FRotator SpawnRotation = GetControlRotation();
                 const FVector SpawnLocation = GetActorLocation();
                 World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
             } else {
-                const FRotator SpawnRotation = GetActorRotation();
+                //const FRotator SpawnRotation = GetActorRotation();
+                const FRotator SpawnRotation = GetControlRotation();
                 const FVector SpawnLocation = GetActorLocation();
-                World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+                AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+                bullet->PlayerReference = this;
             }
         }
     }
