@@ -13,12 +13,12 @@ AScuttleActor::AScuttleActor()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.bAllowTickOnDedicatedServer = true;
 
-    TimeTillMove = 3.f;
+    TimeTillMove = 5.f;
     Accuracy = 0.f;
-    FireRate = 5.f;
+    FireRate = 1.0f;
     WallNormal = FVector(0.f, 0.f, 1.f);
     RangeRadius = -1.f;
-	MaxMoveDistance = 100.f;
+	MaxMoveDistance = 200.f;
 
     CurrentTimeToMove = TimeTillMove;
     CurrentTimeToFire = FireRate;
@@ -73,12 +73,12 @@ void AScuttleActor::BeginPlay() {
 
 // logic for spawning a projectile actor and setting its inital conditions
 void AScuttleActor::OnFire() {
-		UE_LOG(LogTemp, Log, TEXT("Scuttle FIRING"));
+		//UE_LOG(LogTemp, Log, TEXT("Scuttle FIRING"));
 		if (ProjectileClass != NULL)
 		{
 				UWorld* const World = GetWorld();
 				if (World != NULL) {
-						float ProjectileOffset = 1.0f;
+						float ProjectileOffset = 100.0f;
 						const FRotator SpawnRotation = GetActorRotation();
 						const FRotator ScuttleRotator = FRotator(SpawnRotation.Pitch, SpawnRotation.Roll - 90.f, SpawnRotation.Yaw + 0.f);
 						const FVector SpawnLocation = GetActorLocation() + FVector(0.f, 0.f, 50.f);
@@ -99,7 +99,7 @@ void AScuttleActor::OnStopFire() {
 }
 
 void AScuttleActor::Move() {
-	UE_LOG(LogTemp, Log, TEXT("EnemyMoving"));
+	//UE_LOG(LogTemp, Log, TEXT("EnemyMoving"));
 	FVector MovementPlane = FVector(1.f, 1.f, 1.f);
 
 	// Reduce the directions the enemy can move to only the plane it is standing one
