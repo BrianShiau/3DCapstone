@@ -37,6 +37,11 @@ AProjectile::AProjectile()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereVisualAsset(TEXT("/Game/Shapes/Shape_Sphere.Shape_Sphere"));
 	if (SphereVisualAsset.Succeeded())
 	{
+		//static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("/Game/Materials/FresnelBR.FresnelBR"));
+		//UMaterial* TheMaterial = (UMaterial*)Material.Object;
+		//UMaterialInstanceDynamic* TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, SphereMesh);
+		//SphereMesh->SetMaterial(0, TheMaterial_Dyn));
+
 		SphereMesh->SetStaticMesh(SphereVisualAsset.Object);
 		SphereMesh->SetRelativeLocation(FVector(0.0f, 0.0f, -40.0f));
 		SphereMesh->SetWorldScale3D(FVector(0.8f));
@@ -54,7 +59,7 @@ void AProjectile::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImp
 	//UE_LOG(LogTemp, Log, TEXT("WHATA"));
 	if ((OtherActor != NULL) && (OtherActor != this) && (SelfActor != NULL)) {
 		if (!bFiredByPlayer && OtherActor == PlayerReference) {
-			PlayerReference->PlayerTakeDamage(10);
+			PlayerReference->PlayerTakeDamage(18);
 			Destroy();
 			//UE_LOG(LogTemp, Log, TEXT("Player Hit"));
 		} else {

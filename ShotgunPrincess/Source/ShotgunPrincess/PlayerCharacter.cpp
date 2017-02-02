@@ -33,7 +33,7 @@ APlayerCharacter::APlayerCharacter()
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
-    GetCharacterMovement()->JumpZVelocity = 300.f;
+    GetCharacterMovement()->JumpZVelocity = 600.f;
     GetCharacterMovement()->AirControl = 0.2f;
 
     // Creates the Camera Boom
@@ -112,6 +112,7 @@ void APlayerCharacter::OnFire() {
             const FVector SpawnLocation = GetActorLocation();
             AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
             bullet->PlayerReference = this;
+            bullet->bFiredByPlayer = true;
         }
     } else {
 			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
