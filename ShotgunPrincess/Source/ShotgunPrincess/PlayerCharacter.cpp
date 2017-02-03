@@ -8,7 +8,7 @@
 
 namespace {
 	const FVector kBaseDashVector = FVector(0, 4000, 0);
-	const FVector kUpgradedDashVector = FVector(0, 0, 4000);
+	const FVector kUpgradedDashVector = FVector(0, 8000, 0);
 	const float dashCooldown = 2.0f;
 }
 
@@ -33,7 +33,7 @@ APlayerCharacter::APlayerCharacter()
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
-    GetCharacterMovement()->JumpZVelocity = 300.f;
+    GetCharacterMovement()->JumpZVelocity = 600.f;
     GetCharacterMovement()->AirControl = 0.2f;
 
     // Creates the Camera Boom
@@ -112,6 +112,7 @@ void APlayerCharacter::OnFire() {
             const FVector SpawnLocation = GetActorLocation();
             AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
             bullet->PlayerReference = this;
+            bullet->bFiredByPlayer = true;
         }
     } else {
 			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
@@ -129,8 +130,8 @@ void APlayerCharacter::Dash() {
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	if (nullptr != InputComponent && nullptr != playerController && currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
-		// Grab axis of movement on Y, value either -1.0f or 1.0f on keyboard. When controller added, need to update.
-		const float dashDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
+		// Grab Y velocity and clamp it to -1.0f < x < 1.0f;
+		const float dashDirection = FMath::Clamp(GetVelocity().Y, -1.0f, 1.0f);
 		// Check if player has dash upgrade
 		const bool hasDashUpgrade = PlayerInventory->HasDashBoots;
 		// If has dash upgrade, use upgraded dash vector, else use base dash vector
