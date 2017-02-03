@@ -47,6 +47,6 @@ public:
 	UFUNCTION()
 	void OpenDoor();
 
-	UFUNCTION
+	UFUNCTION()
 	void CloseDoor();
 };

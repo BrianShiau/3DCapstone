@@ -42,12 +42,12 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom->TargetArmLength = 100.f;
 	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f);
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
-    CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
+    CameraBoom->bUsePawnControlRotation = false; // rotate the arm based on the controller
 
     // Create the Camera
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-    Camera->bUsePawnControlRotation = false;
+    Camera->bUsePawnControlRotation = true;
 
 	//Create camera sphere collider
 	CameraSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CameraSphere"));
