@@ -11,11 +11,13 @@ AProjectile::AProjectile()
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	CollisionComponent->InitSphereRadius(5.f);
 	CollisionComponent->BodyInstance.SetCollisionProfileName("Projectile");
-	CollisionComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	//CollisionComponent->OnActorHit.AddDynamic(this, &AProjectile::OnHit);
 
 	// Players can not walt on it
 	CollisionComponent->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComponent->CanCharacterStepUpOn = ECB_No;
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
 
 	// Set Collision Component as Root Component
 	if (!SetRootComponent(CollisionComponent)) { UE_LOG(LogTemp, Log, TEXT("ERROR, Could Not Set Root Component")); }
@@ -35,18 +37,35 @@ AProjectile::AProjectile()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereVisualAsset(TEXT("/Game/Shapes/Shape_Sphere.Shape_Sphere"));
 	if (SphereVisualAsset.Succeeded())
 	{
+		//static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("/Game/Materials/FresnelBR.FresnelBR"));
+		//UMaterial* TheMaterial = (UMaterial*)Material.Object;
+		//UMaterialInstanceDynamic* TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, SphereMesh);
+		//SphereMesh->SetMaterial(0, TheMaterial_Dyn));
+
 		SphereMesh->SetStaticMesh(SphereVisualAsset.Object);
 		SphereMesh->SetRelativeLocation(FVector(0.0f, 0.0f, -40.0f));
 		SphereMesh->SetWorldScale3D(FVector(0.8f));
 	}
 
+	bFiredByPlayer = false;
+
 	// Die After 3 Secs
-	InitialLifeSpan = 3.f;
+	InitialLifeSpan = 6.f;
+
+	this->OnActorHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
-void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) {
-	if ((OtherActor != NULL) && (OtherActor != this) && (Cast<APlayerCharacter>(OtherActor) == PlayerReference) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics()) {
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.f, GetActorLocation());
-		Destroy();
+void AProjectile::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit) {
+	//UE_LOG(LogTemp, Log, TEXT("WHATA"));
+	if ((OtherActor != NULL) && (OtherActor != this) && (SelfActor != NULL)) {
+		if (!bFiredByPlayer && OtherActor == PlayerReference) {
+			PlayerReference->PlayerTakeDamage(18);
+			Destroy();
+			//UE_LOG(LogTemp, Log, TEXT("Player Hit"));
+		} else {
+			//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.f, GetActorLocation());
+			Destroy();
+			//UE_LOG(LogTemp, Log, TEXT("Non Player Hit"));
+		}
 	}
 }

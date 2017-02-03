@@ -26,12 +26,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	class APlayerCharacter* PlayerReference;
 
+	// if the projectile was fired by the player
+	UPROPERTY(EditAnywhere)
+	bool bFiredByPlayer;
+
 	// Sets default values for this actor's properties
 	AProjectile();
 
 	// Called when there is a collision
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	//void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
 	// Getter Methods
 	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComponent; }

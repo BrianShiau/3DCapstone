@@ -12,6 +12,7 @@ UCLASS()
 class SHOTGUNPRINCESS_API AShotgunPrincessGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
 	
 public:
     AShotgunPrincessGameModeBase();

@@ -9,57 +9,67 @@ UCLASS()
 class SHOTGUNPRINCESS_API AScuttleActor : public AActor
 {
 	GENERATED_BODY()
-    
+
     UPROPERTY(VisibleDefaultsOnly)
     class USphereComponent* SightRange;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* Mesh;
+
 public:
 
 	// Set in BluePrints
 	UPROPERTY(EditAnywhere)
-	class ACharacter* PlayerCharacter;
-    
+	class APlayerCharacter* PlayerCharacter;
+
     UPROPERTY(EditAnywhere)
     float TimeTillMove;
-    
+
     UPROPERTY(EditAnywhere)
     float Accuracy;
-    
+
     UPROPERTY(EditAnywhere)
     float FireRate;
-    
+
     UPROPERTY(EditAnywhere)
     FVector WallNormal;
-    
+
+	UPROPERTY(EditAnywhere)
+	float MaxMoveDistance;
+
     UPROPERTY(EditAnywhere)
     float RangeRadius;
-    
+
     // Set in BluePrints
-    UPROPERTY(EditDefaultsOnly, Category=Projectile)
+    UPROPERTY(EditAnywhere, Category=Projectile)
     TSubclassOf<class AProjectile> ProjectileClass;
-    
+
     // modifiers
     float CurrentTimeToMove;
     float CurrentTimeToFire;
     bool bPlayerInRange;
-    
+
     void OnFire();
-    
+
     void OnStopFire();
-    
+
     void Move();
-    
+
     FVector Aim();
-    
+
 	// Sets default values for this actor's properties
 	AScuttleActor();
-	
+
+	UFUNCTION(BlueprintCallable, Category="Initialize")
+	void SetReferenceToPlayer(APlayerCharacter* Ref);
+
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
-    
+
     // Creates the sight range
     virtual void BeginPlay() override;
 
     // Getter Methods
     FORCEINLINE class USphereComponent* GetSightRange() const { return SightRange; }
+	FORCEINLINE class UStaticMeshComponent* GetMesh() const { return Mesh; }
 };

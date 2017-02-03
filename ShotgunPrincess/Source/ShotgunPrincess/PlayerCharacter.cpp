@@ -4,10 +4,11 @@
 #include "PlayerCharacter.h"
 #include "Projectile.h"
 #include "PlayerInventory.h"
+#include "Door.h"
 
 namespace {
 	const FVector kBaseDashVector = FVector(0, 4000, 0);
-	const FVector kUpgradedDashVector = FVector(0, 0, 4000);
+	const FVector kUpgradedDashVector = FVector(0, 8000, 0);
 	const float dashCooldown = 2.0f;
 }
 
@@ -16,7 +17,7 @@ APlayerCharacter::APlayerCharacter()
 {
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.f);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Overlap);
-    
+
 
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
@@ -39,7 +40,7 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
     CameraBoom->TargetArmLength = 100.f;
-	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f); 
+	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f);
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
     CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
 
@@ -51,15 +52,20 @@ APlayerCharacter::APlayerCharacter()
 	//Create camera sphere collider
 	CameraSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CameraSphere"));
 	CameraSphere->SetSphereRadius(12.f);
-	CameraSphere->AttachTo(Camera, "Camera");
+	CameraSphere->SetupAttachment(Camera);
 
 	// Create the Player's Inventory
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Inventory"));
 
-    bUsingMotionControllers = false;
-
 	// Set the Player's default health
 	Health = 100;
+
+	isNearDoor = false;
+	isOpeningDoor = false;
+	aDoor = NULL;
+	MaxHealth = 100;
+	Health = MaxHealth;
+	TimeSinceHealthLoss = 100;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -68,7 +74,7 @@ void APlayerCharacter::MoveForward(float Value) {
         const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
         const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
         AddMovementInput(Forward, Value);
-        UE_LOG(LogTemp, Log, TEXT("MOVING FORWARD"));
+        //UE_LOG(LogTemp, Log, TEXT("MOVING FORWARD"));
     }
 }
 
@@ -78,45 +84,39 @@ void APlayerCharacter::MoveRight(float Value) {
         const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
         const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
         AddMovementInput(Forward, Value);
-        UE_LOG(LogTemp, Log, TEXT("MOVING RIGHT"));
+        //UE_LOG(LogTemp, Log, TEXT("MOVING RIGHT"));
     }
 }
 
 void APlayerCharacter::TurnAtRate(float Rate) {
     if (Rate != 0.f) {
-        UE_LOG(LogTemp, Log, TEXT("TURNING"));
+        //UE_LOG(LogTemp, Log, TEXT("TURNING"));
         AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
     }
 }
 
 void APlayerCharacter::LookUpAtRate(float Rate) {
     if (Rate != 0.f) {
-        UE_LOG(LogTemp, Log, TEXT("LOOKING UP"));
+        //UE_LOG(LogTemp, Log, TEXT("LOOKING UP"));
         AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
     }
 }
 
 void APlayerCharacter::OnFire() {
-    UE_LOG(LogTemp, Log, TEXT("FIRING"));
+    //UE_LOG(LogTemp, Log, TEXT("FIRING"));
     if (ProjectileClass != NULL)
     {
         UWorld* const World = GetWorld();
         if (World != NULL) {
-            if (bUsingMotionControllers)
-            {
-                //const FRotator SpawnRotation = GetActorRotation();
-                const FRotator SpawnRotation = GetControlRotation();
-                const FVector SpawnLocation = GetActorLocation();
-                World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-            } else {
-                //const FRotator SpawnRotation = GetActorRotation();
-                const FRotator SpawnRotation = GetControlRotation();
-                const FVector SpawnLocation = GetActorLocation();
-                AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
-                bullet->PlayerReference = this;
-            }
+            const FRotator SpawnRotation = GetControlRotation();
+            const FVector SpawnLocation = GetActorLocation();
+            AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+            bullet->PlayerReference = this;
+            bullet->bFiredByPlayer = true;
         }
-    }
+    } else {
+			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
+		}
 }
 
 void APlayerCharacter::OnStopFire() {
@@ -126,13 +126,12 @@ void APlayerCharacter::OnStopFire() {
 void APlayerCharacter::Dash() {
 
 	const APlayerController* playerController = Cast<APlayerController>(GetController());
+	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	if (nullptr != InputComponent && nullptr != playerController && currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
-		// Grab axis of movement on Y, value either -1.0f or 1.0f on keyboard. When controller added, need to update.
-		const float dashDirection = InputComponent->GetAxisValue(TEXT("MoveRight"));
-		// Get Player movement component
-		UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
+		// Grab Y velocity and clamp it to -1.0f < x < 1.0f;
+		const float dashDirection = FMath::Clamp(GetVelocity().Y, -1.0f, 1.0f);
 		// Check if player has dash upgrade
 		const bool hasDashUpgrade = PlayerInventory->HasDashBoots;
 		// If has dash upgrade, use upgraded dash vector, else use base dash vector
@@ -143,6 +142,24 @@ void APlayerCharacter::Dash() {
 		dashLastUsed = currentTime;
 	}
 
+}
+
+void APlayerCharacter::Interact() {
+
+	if (isNearDoor) {
+		// Open the Door
+		isOpeningDoor = true;
+		isNearDoor = false;
+	}
+}
+
+void APlayerCharacter::NearDoor(ADoor* someDoor) {
+	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, "Press 'F' to Open the Door");
+	isNearDoor = true;
+	if (someDoor != NULL) {
+
+		aDoor = someDoor;
+	}
 }
 
 // Called to bind functionality to input
@@ -160,6 +177,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &APlayerCharacter::Dash);
 
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
+
     // turn is for mouse
     // turn rate is for joystick
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -172,8 +191,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 // Causes the Player to take damage
 void APlayerCharacter::PlayerTakeDamage(int damage) {
-	UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
+	//UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
 	Health -= damage;
+	TimeSinceHealthLoss = 0;
 	if (Health <= 0) {
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	}
@@ -190,5 +210,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 		GetMesh()->SetOwnerNoSee(false);
 	}
 
-}
+	TimeSinceHealthLoss += GetWorld()->GetDeltaSeconds();
 
+	if (TimeSinceHealthLoss > 3 && Health < MaxHealth) {
+		Health++;
+	}
+}
