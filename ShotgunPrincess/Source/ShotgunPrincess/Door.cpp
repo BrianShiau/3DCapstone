@@ -11,14 +11,16 @@ ADoor::ADoor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	needsKey = false;
+	isOpen = false;
+
 }
 
 // Called when the game starts or when spawned
 void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	isOpen = false;
+	
 	
 
 	// Set up Collision
@@ -41,7 +43,7 @@ void ADoor::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 	OpenDoor();
-
+	CloseDoor();
 
 }
 
@@ -89,4 +91,8 @@ void ADoor::OpenDoor() {
 			isOpen = true;
 		}
 	}
+}
+
+void ADoor::CloseDoor() {
+
 }
