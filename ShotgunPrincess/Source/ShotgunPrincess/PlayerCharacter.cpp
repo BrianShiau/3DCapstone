@@ -26,9 +26,9 @@ APlayerCharacter::APlayerCharacter()
 	dashLastUsed = 0.f;
 
     // Player controllers are used to control Pawns if specified to true
-    bUseControllerRotationPitch = false;
+    bUseControllerRotationPitch = true;
     bUseControllerRotationRoll = false;
-    bUseControllerRotationYaw = false;
+    bUseControllerRotationYaw = true;
 
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
@@ -42,7 +42,9 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom->TargetArmLength = 100.f;
 	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f);
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
-    CameraBoom->bUsePawnControlRotation = false; // rotate the arm based on the controller
+    //CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when character does
+	CameraBoom->bUsePawnControlRotation = false;
+	CameraBoom->bUseControllerViewRotation = true;
 
     // Create the Camera
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
