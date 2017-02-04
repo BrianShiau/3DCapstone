@@ -47,7 +47,7 @@ APlayerCharacter::APlayerCharacter()
     // Create the Camera
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-    Camera->bUsePawnControlRotation = true;
+    Camera->bUsePawnControlRotation = false;
 
 	//Create camera sphere collider
 	CameraSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CameraSphere"));

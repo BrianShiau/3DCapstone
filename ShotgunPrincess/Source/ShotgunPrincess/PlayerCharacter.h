@@ -11,7 +11,7 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
   GENERATED_BODY()
 
   // Camera boom for positioning
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
   class USpringArmComponent* CameraBoom;
 
   // The Camera
