@@ -68,6 +68,10 @@ APlayerCharacter::APlayerCharacter()
 	MaxHealth = 100;
 	Health = MaxHealth;
 	TimeSinceHealthLoss = 100;
+
+	// Set Time between attacks
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -105,20 +109,24 @@ void APlayerCharacter::LookUpAtRate(float Rate) {
 }
 
 void APlayerCharacter::OnFire() {
-    //UE_LOG(LogTemp, Log, TEXT("FIRING"));
-    if (ProjectileClass != NULL)
-    {
-        UWorld* const World = GetWorld();
-        if (World != NULL) {
-            const FRotator SpawnRotation = GetControlRotation();
-            const FVector SpawnLocation = GetActorLocation();
-            AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
-            bullet->PlayerReference = this;
-            bullet->bFiredByPlayer = true;
-        }
-    } else {
+	if (LastFired + FireCooldown < GetWorld()->GetTimeSeconds()) {
+		//UE_LOG(LogTemp, Log, TEXT("FIRING"));
+		if (ProjectileClass != NULL)
+		{
+			UWorld* const World = GetWorld();
+			if (World != NULL) {
+				const FRotator SpawnRotation = GetControlRotation();
+				const FVector SpawnLocation = GetActorLocation();
+				AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+				bullet->PlayerReference = this;
+				bullet->bFiredByPlayer = true;
+			}
+			LastFired = GetWorld()->GetTimeSeconds();
+		}
+		else {
 			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
 		}
+	}
 }
 
 void APlayerCharacter::OnStopFire() {

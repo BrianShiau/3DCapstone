@@ -34,6 +34,14 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float TimeSinceHealthLoss;
 
+	// Time player last fired
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float LastFired;
+
+	// Time until player can fire again
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float FireCooldown;
+
 	// Time player last used dash
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float dashLastUsed;
