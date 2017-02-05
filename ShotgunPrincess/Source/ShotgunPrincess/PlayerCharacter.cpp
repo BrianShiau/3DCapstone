@@ -70,7 +70,7 @@ APlayerCharacter::APlayerCharacter()
 	TimeSinceHealthLoss = 100;
 
 	// Set Time between attacks
-	FireCooldown = 1;
+	FireCooldown = .3;
 	LastFired = -FireCooldown - 1;
 	Firing = false;
 }
@@ -106,6 +106,12 @@ void APlayerCharacter::LookUpAtRate(float Rate) {
     if (Rate != 0.f) {
         //UE_LOG(LogTemp, Log, TEXT("LOOKING UP"));
         AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+    }
+}
+
+void APlayerCharacter::InvertMouseLookUp(float Rate) {
+    if (Rate != 0.f) {
+		AddControllerPitchInput(-1 * Rate);
     }
 }
 
@@ -176,7 +182,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     // turn is for mouse
     // turn rate is for joystick
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-    PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+    PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::InvertMouseLookUp);
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
 

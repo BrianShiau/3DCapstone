@@ -110,6 +110,9 @@ public:
   // Input to look up at a normalized rate (for joystick)
   void LookUpAtRate(float Rate);
 
+  // Input to invert look up controls
+  void InvertMouseLookUp(float Rate);
+
 	// Causes the Player to take damage
   void PlayerTakeDamage(int damage);
 
