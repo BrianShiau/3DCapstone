@@ -11,7 +11,7 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
   GENERATED_BODY()
 
   // Camera boom for positioning
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
   class USpringArmComponent* CameraBoom;
 
   // The Camera
@@ -33,6 +33,18 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	// Time player since the player last lost health
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float TimeSinceHealthLoss;
+
+	// Time player last fired
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float LastFired;
+
+	// Time until player can fire again
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float FireCooldown;
+
+	// Whether the player is currently firing (holding down the mouse button)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool Firing;
 
 	// Time player last used dash
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -97,6 +109,9 @@ public:
 
   // Input to look up at a normalized rate (for joystick)
   void LookUpAtRate(float Rate);
+
+  // Input to invert look up controls
+  void InvertMouseLookUp(float Rate);
 
 	// Causes the Player to take damage
   UFUNCTION()

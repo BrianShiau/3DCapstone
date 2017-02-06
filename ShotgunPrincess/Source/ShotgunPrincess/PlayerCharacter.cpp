@@ -26,9 +26,9 @@ APlayerCharacter::APlayerCharacter()
 	dashLastUsed = 0.f;
 
     // Player controllers are used to control Pawns if specified to true
-    bUseControllerRotationPitch = false;
+    bUseControllerRotationPitch = true;
     bUseControllerRotationRoll = false;
-    bUseControllerRotationYaw = false;
+    bUseControllerRotationYaw = true;
 
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
@@ -42,7 +42,9 @@ APlayerCharacter::APlayerCharacter()
     CameraBoom->TargetArmLength = 100.f;
 	CameraBoom->SocketOffset = FVector(0.f, 55.f, 0.f);
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
-    CameraBoom->bUsePawnControlRotation = true; // rotate the arm based on the controller
+    //CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when character does
+	CameraBoom->bUsePawnControlRotation = false;
+	CameraBoom->bUseControllerViewRotation = true;
 
     // Create the Camera
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -66,6 +68,11 @@ APlayerCharacter::APlayerCharacter()
 	MaxHealth = 100;
 	Health = MaxHealth;
 	TimeSinceHealthLoss = 100;
+
+	// Set Time between attacks
+	FireCooldown = .3;
+	LastFired = -FireCooldown - 1;
+	Firing = false;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -102,25 +109,18 @@ void APlayerCharacter::LookUpAtRate(float Rate) {
     }
 }
 
+void APlayerCharacter::InvertMouseLookUp(float Rate) {
+    if (Rate != 0.f) {
+		AddControllerPitchInput(-1 * Rate);
+    }
+}
+
 void APlayerCharacter::OnFire() {
-    //UE_LOG(LogTemp, Log, TEXT("FIRING"));
-    if (ProjectileClass != NULL)
-    {
-        UWorld* const World = GetWorld();
-        if (World != NULL) {
-            const FRotator SpawnRotation = GetControlRotation();
-            const FVector SpawnLocation = GetActorLocation();
-            AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
-            bullet->PlayerReference = this;
-            bullet->bFiredByPlayer = true;
-        }
-    } else {
-			UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
-		}
+	Firing = true;
 }
 
 void APlayerCharacter::OnStopFire() {
-    // does nothing for now
+	Firing = false;
 }
 
 void APlayerCharacter::Dash() {
@@ -182,7 +182,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     // turn is for mouse
     // turn rate is for joystick
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-    PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+    PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::InvertMouseLookUp);
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
 
@@ -214,5 +214,26 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (TimeSinceHealthLoss > 3 && Health < MaxHealth) {
 		Health++;
+	}
+
+	if (Firing) {
+		if (LastFired + FireCooldown < GetWorld()->GetTimeSeconds()) {
+			//UE_LOG(LogTemp, Log, TEXT("FIRING"));
+			if (ProjectileClass != NULL)
+			{
+				UWorld* const World = GetWorld();
+				if (World != NULL) {
+					const FRotator SpawnRotation = GetControlRotation();
+					const FVector SpawnLocation = GetActorLocation();
+					AProjectile* bullet = World->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation + SpawnRotation.Vector() * ProjectileOffset, SpawnRotation);
+					bullet->PlayerReference = this;
+					bullet->bFiredByPlayer = true;
+				}
+				LastFired = GetWorld()->GetTimeSeconds();
+			}
+			else {
+				UE_LOG(LogTemp, Log, TEXT("ERROR :: PROJECTILE CLASS IS NOT SET"));
+			}
+		}
 	}
 }
