@@ -22,15 +22,15 @@ class SHOTGUNPRINCESS_API ADoor : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool needsKey;
 
-	
-	
-public:	
+
+
+public:
 	// Sets default values for this actor's properties
 	ADoor();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
@@ -43,10 +43,10 @@ public:
 
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	
+
 	UFUNCTION()
 	void OpenDoor();
 
-	UFUNCTION
+	UFUNCTION()
 	void CloseDoor();
 };

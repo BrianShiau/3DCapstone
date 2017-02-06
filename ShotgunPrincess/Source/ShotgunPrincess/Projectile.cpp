@@ -60,11 +60,11 @@ void AProjectile::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImp
 	if ((OtherActor != NULL) && (OtherActor != this) && (SelfActor != NULL)) {
 		if (!bFiredByPlayer && OtherActor == PlayerReference) {
 			PlayerReference->PlayerTakeDamage(18);
-			Destroy();
+			//Destroy();
 			//UE_LOG(LogTemp, Log, TEXT("Player Hit"));
 		} else {
 			//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.f, GetActorLocation());
-			Destroy();
+			//Destroy();
 			//UE_LOG(LogTemp, Log, TEXT("Non Player Hit"));
 		}
 	}
