@@ -26,7 +26,7 @@ APlayerCharacter::APlayerCharacter()
 	dashLastUsed = 0.f;
 
     // Player controllers are used to control Pawns if specified to true
-    bUseControllerRotationPitch = true;
+    bUseControllerRotationPitch = false;
     bUseControllerRotationRoll = false;
     bUseControllerRotationYaw = true;
 
