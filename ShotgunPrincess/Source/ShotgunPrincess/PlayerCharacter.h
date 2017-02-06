@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+
 UCLASS()
 class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 {
@@ -19,7 +20,7 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
   class UCameraComponent* Camera;
 
 	// The Player's Inventory
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UPlayerInventory* PlayerInventory;
 
 	// The Player's Health

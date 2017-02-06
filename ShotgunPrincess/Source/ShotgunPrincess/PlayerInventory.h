@@ -9,7 +9,9 @@
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOTGUNPRINCESS_API UPlayerInventory : public UActorComponent
 {
+private:
 	GENERATED_BODY()
+	class TSet<FName> keys;
 
 public:	
 	// Sets default values for this component's properties
@@ -19,9 +21,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool HasDashBoots;
 
-	// If the Player has the Ballroom Key
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool HasBallRoomKey;
+	UFUNCTION(BlueprintCallable, Category="C++")
+	void AddKey(FName keyName);
+
+	UFUNCTION(BlueprintCallable, Category="C++")
+	bool HasKey(FName keyName) const;
 
 	void ResetInventory();
 };

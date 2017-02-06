@@ -7,12 +7,20 @@
 // Sets default values for this component's properties
 UPlayerInventory::UPlayerInventory()
 {
-	HasDashBoots = false;
-	HasBallRoomKey = false;
+	ResetInventory();
 }
 
 void UPlayerInventory::ResetInventory()
 {
 	HasDashBoots = false;
-	HasBallRoomKey = false;
+	keys.Empty();
+}
+
+void UPlayerInventory::AddKey(FName keyName)
+{
+	keys.Add(keyName);
+}
+
+bool UPlayerInventory::HasKey(FName keyName) const {
+	return keys.Contains(keyName);
 }
