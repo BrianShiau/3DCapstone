@@ -84,6 +84,10 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TSubclassOf<class AProjectile> ProjectileClass;
 
+	// Projectile class to spawn
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int WeaponType;
+
   // Called for pressing the fire button
   void OnFire();
 
@@ -113,6 +117,12 @@ public:
 
   // Input to invert look up controls
   void InvertMouseLookUp(float Rate);
+
+  // Called when the player wants to switch to the second weapon
+  void Weapon2();
+
+  // Called when the player wants to switch to the first weapon
+  void Weapon1();
 
 	// Causes the Player to take damage
   UFUNCTION(BlueprintCallable, Category="Attack")

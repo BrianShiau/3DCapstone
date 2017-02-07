@@ -73,6 +73,9 @@ APlayerCharacter::APlayerCharacter()
 	FireCooldown = .3;
 	LastFired = -FireCooldown - 1;
 	Firing = false;
+
+	// Set default weapon type
+	WeaponType = 0;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -144,6 +147,14 @@ void APlayerCharacter::Dash() {
 
 }
 
+void APlayerCharacter::Weapon1() {
+	WeaponType = 1;
+}
+
+void APlayerCharacter::Weapon2() {
+	WeaponType = 2;
+}
+
 void APlayerCharacter::Interact() {
 
 	if (isNearDoor) {
@@ -179,6 +190,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &APlayerCharacter::Dash);
+
+	PlayerInputComponent->BindAction("Weapon1", IE_Pressed, this, &APlayerCharacter::Weapon1);
+	PlayerInputComponent->BindAction("Weapon2", IE_Pressed, this, &APlayerCharacter::Weapon2);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 
