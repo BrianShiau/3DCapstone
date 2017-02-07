@@ -116,9 +116,7 @@ void APlayerCharacter::InvertMouseLookUp(float Rate) {
 }
 
 void APlayerCharacter::OnFire() {
-	if (LastFired + FireCooldown < GetWorld()->GetTimeSeconds()) {
-		Firing = true;
-	}
+	Firing = true;
 }
 
 void APlayerCharacter::OnStopFire() {
