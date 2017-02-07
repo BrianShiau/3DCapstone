@@ -19,8 +19,11 @@ class SHOTGUNPRINCESS_API ADoor : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool needsKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FName doorName;
 
 
 
@@ -48,5 +51,6 @@ public:
 	void OpenDoor();
 
 	UFUNCTION()
-	void CloseDoor();
+	bool Openable();
+
 };

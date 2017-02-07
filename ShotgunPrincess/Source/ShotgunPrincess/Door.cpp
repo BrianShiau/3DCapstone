@@ -3,6 +3,9 @@
 #include "ShotgunPrincess.h"
 #include "Door.h"
 #include "PlayerCharacter.h"
+#include "PlayerInventory.h"
+#include <string>
+#include <iostream>
 
 
 // Sets default values
@@ -10,8 +13,6 @@ ADoor::ADoor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	needsKey = false;
 	isOpen = false;
 
 }
@@ -43,7 +44,7 @@ void ADoor::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 	OpenDoor();
-	CloseDoor();
+	
 
 }
 
@@ -85,14 +86,35 @@ void ADoor::OpenDoor() {
 
 	if (Interactor != NULL) {
 		if (Interactor->getIsOpeningDoor() && isOpen == false) {
-			
-			//GetOwner()->SetActorRotation(FRotator(0.f, 0.f, 90.f));
-			StaticMeshComponent->SetRelativeLocation(FVector(0.f, 80.f, 0.f));
-			isOpen = true;
+			if (Openable()) {
+				StaticMeshComponent->SetRelativeLocation(FVector(0.f, 80.f, 0.f));
+				isOpen = true;
+				Interactor->setIsOpeningDoor(false);
+			}
 		}
 	}
 }
 
-void ADoor::CloseDoor() {
-
+bool ADoor::Openable() {
+	bool keyFound = false;
+	if (Interactor != NULL) {
+		/*Conversion of Door Name to Key Name. Door1 -> Key1*/
+		//FName to FString to std::string
+		std::string cDoorName(TCHAR_TO_UTF8(*doorName.ToString()));
+		std::string number; 
+		std::string delimiter = "r";
+		size_t pos = 0;
+		while ((pos = cDoorName.find(delimiter)) != std::string::npos) {
+			std::cout << number << std::endl;
+			cDoorName.erase(0, pos + delimiter.length());
+		}
+		number = cDoorName;
+		std::string cKeyName = "Key" + number;
+		//std::string to FString to FName
+		FName keyName = FName(*FString(cKeyName.c_str()));
+		UPlayerInventory* inventory = Interactor->getInventory();
+		keyFound = inventory->HasKey(keyName);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString(cKeyName.c_str()));
+	}
+	return needsKey == false || keyFound;
 }
