@@ -114,7 +114,7 @@ public:
   void InvertMouseLookUp(float Rate);
 
 	// Causes the Player to take damage
-  UFUNCTION()
+  UFUNCTION(BlueprintCallable, Category="Attack")
   void PlayerTakeDamage(int damage);
 
 	// Called every frame
