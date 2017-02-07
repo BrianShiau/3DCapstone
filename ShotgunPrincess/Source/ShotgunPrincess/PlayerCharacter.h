@@ -132,4 +132,5 @@ public:
     FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
 	FORCEINLINE bool getIsOpeningDoor() { return isOpeningDoor;  }
 	FORCEINLINE void setIsOpeningDoor(bool bDoor) { isOpeningDoor = bDoor; }
+	FORCEINLINE class UPlayerInventory* getInventory() const { return PlayerInventory; }
 };

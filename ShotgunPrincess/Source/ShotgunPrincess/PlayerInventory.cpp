@@ -19,7 +19,7 @@ void UPlayerInventory::ResetInventory()
 void UPlayerInventory::AddKey(FName keyName)
 {
 	keys.Add(keyName);
-	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, FString::Printf(TEXT("There are %d Keys"), keys.Num()));
+	//GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, FString::Printf(TEXT("There are %d Keys"), keys.Num()));
 }
 
 bool UPlayerInventory::HasKey(FName keyName) const {
