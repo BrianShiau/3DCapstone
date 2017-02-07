@@ -5,6 +5,7 @@
 #include "PlayerCharacter.h"
 #include "PlayerInventory.h"
 #include <string>
+#include <iostream>
 
 
 // Sets default values
@@ -100,12 +101,20 @@ bool ADoor::Openable() {
 		/*Conversion of Door Name to Key Name. Door1 -> Key1*/
 		//FName to FString to std::string
 		std::string cDoorName(TCHAR_TO_UTF8(*doorName.ToString()));
-		std::string number = &cDoorName.back();
+		std::string number; 
+		std::string delimiter = "r";
+		size_t pos = 0;
+		while ((pos = cDoorName.find(delimiter)) != std::string::npos) {
+			std::cout << number << std::endl;
+			cDoorName.erase(0, pos + delimiter.length());
+		}
+		number = cDoorName;
 		std::string cKeyName = "Key" + number;
 		//std::string to FString to FName
 		FName keyName = FName(*FString(cKeyName.c_str()));
 		UPlayerInventory* inventory = Interactor->getInventory();
 		keyFound = inventory->HasKey(keyName);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString(cKeyName.c_str()));
 	}
 	return needsKey == false || keyFound;
 }
