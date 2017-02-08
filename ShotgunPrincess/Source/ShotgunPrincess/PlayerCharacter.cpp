@@ -155,6 +155,26 @@ void APlayerCharacter::Weapon2() {
 	WeaponType = 2;
 }
 
+void APlayerCharacter::Weapon3() {
+	WeaponType = 3;
+}
+
+void APlayerCharacter::Weapon4() {
+	WeaponType = 4;
+}
+
+void APlayerCharacter::Weapon5() {
+	WeaponType = 5;
+}
+
+void APlayerCharacter::Weapon6() {
+	WeaponType = 6;
+}
+
+void APlayerCharacter::Weapon7() {
+	WeaponType = 7;
+}
+
 void APlayerCharacter::Interact() {
 
 	if (isNearDoor) {
@@ -193,6 +213,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction("Weapon1", IE_Pressed, this, &APlayerCharacter::Weapon1);
 	PlayerInputComponent->BindAction("Weapon2", IE_Pressed, this, &APlayerCharacter::Weapon2);
+	PlayerInputComponent->BindAction("Weapon3", IE_Pressed, this, &APlayerCharacter::Weapon3);
+	PlayerInputComponent->BindAction("Weapon4", IE_Pressed, this, &APlayerCharacter::Weapon4);
+	PlayerInputComponent->BindAction("Weapon5", IE_Pressed, this, &APlayerCharacter::Weapon5);
+	PlayerInputComponent->BindAction("Weapon6", IE_Pressed, this, &APlayerCharacter::Weapon6);
+	PlayerInputComponent->BindAction("Weapon7", IE_Pressed, this, &APlayerCharacter::Weapon7);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 
