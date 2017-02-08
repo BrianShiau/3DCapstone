@@ -33,7 +33,8 @@ APlayerCharacter::APlayerCharacter()
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
-    GetCharacterMovement()->JumpZVelocity = 600.f;
+    //GetCharacterMovement()->JumpZVelocity = 400.f;
+		GetCharacterMovement()->JumpZVelocity = 0.f;
     GetCharacterMovement()->AirControl = 0.2f;
 
     // Creates the Camera Boom
@@ -145,7 +146,7 @@ void APlayerCharacter::Dash() {
 		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
 
 		// Get dash velocity
-		const FVector dashVelocity = PlayerInventory->HasDashBoots ? kUpgradedDashVelocity : kBaseDashVelocity;
+		const FVector dashVelocity = PlayerInventory->HasDashBoots ? kUpgradedDashVelocity : kBaseDashVelocity / 2.0;
 
 		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
 		movementComponent->Launch(dashDirection *  dashVelocity);
@@ -208,8 +209,9 @@ void APlayerCharacter::NearDoor(ADoor* someDoor) {
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     check(PlayerInputComponent);
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-    PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+		// Commented out till our level design makes jump a necessity
+    //PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+    //PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
     PlayerInputComponent->BindAction("FirePrimary", IE_Pressed, this, &APlayerCharacter::OnFire);
     PlayerInputComponent->BindAction("FirePrimary", IE_Released, this, &APlayerCharacter::OnStopFire);
