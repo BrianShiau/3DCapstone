@@ -87,7 +87,7 @@ void ADoor::OpenDoor() {
 	if (Interactor != NULL) {
 		if (Interactor->getIsOpeningDoor() && isOpen == false) {
 			if (Openable()) {
-				StaticMeshComponent->SetRelativeLocation(FVector(0.f, 80.f, 0.f));
+				StaticMeshComponent->SetRelativeLocation(FVector(xTranslate, yTranslate, zTranslate)); // y = 80.f
 				isOpen = true;
 				Interactor->setIsOpeningDoor(false);
 			}
