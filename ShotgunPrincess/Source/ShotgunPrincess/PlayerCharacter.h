@@ -121,6 +121,21 @@ public:
   // Input to invert look up controls
   void InvertMouseLookUp(float Rate);
 
+  // Called when the player wants to switch to the seventh weapon
+  void Weapon7();
+
+  // Called when the player wants to switch to the sixth weapon
+  void Weapon6();
+
+  // Called when the player wants to switch to the fifth weapon
+  void Weapon5();
+
+  // Called when the player wants to switch to the fourth weapon
+  void Weapon4();
+
+  // Called when the player wants to switch to the third weapon
+  void Weapon3();
+
   // Called when the player wants to switch to the second weapon
   void Weapon2();
 

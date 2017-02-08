@@ -7,9 +7,9 @@
 #include "Door.h"
 
 namespace {
-	const FVector kBaseDashVector = FVector(0, 4000, 0);
-	const FVector kUpgradedDashVector = FVector(0, 8000, 0);
-	const float dashCooldown = 2.0f;
+	const FVector kBaseDashVelocity = FVector(3000, 3000, 0);
+	const FVector kUpgradedDashVelocity = 2 * kBaseDashVelocity;
+	const float dashCooldown = 1.0f;
 }
 
 // Sets default values
@@ -33,7 +33,8 @@ APlayerCharacter::APlayerCharacter()
     // Sets the players movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
-    GetCharacterMovement()->JumpZVelocity = 600.f;
+    //GetCharacterMovement()->JumpZVelocity = 400.f;
+		GetCharacterMovement()->JumpZVelocity = 0.f;
     GetCharacterMovement()->AirControl = 0.2f;
 
     // Creates the Camera Boom
@@ -127,20 +128,28 @@ void APlayerCharacter::OnStopFire() {
 }
 
 void APlayerCharacter::Dash() {
-
-	const APlayerController* playerController = Cast<APlayerController>(GetController());
+	if ( nullptr == InputComponent || nullptr == GetController() )
+		return;
 	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
-	if (nullptr != InputComponent && nullptr != playerController && currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
-		// Grab Y velocity and clamp it to -1.0f < x < 1.0f;
-		const float dashDirection = FMath::Clamp(GetVelocity().Y, -1.0f, 1.0f);
-		// Check if player has dash upgrade
-		const bool hasDashUpgrade = PlayerInventory->HasDashBoots;
-		// If has dash upgrade, use upgraded dash vector, else use base dash vector
-		const FVector dashVector = hasDashUpgrade ? kUpgradedDashVector : kBaseDashVector;
+	if ( currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround() ) {
+
+		// Grab Forward/Backward movement direction and vals
+		const float forwardInput = GetInputAxisValue("MoveForward");
+		const FVector forwardVector = GetActorForwardVector();
+		// Grab Left/Right movement direction and vals
+		const float rightInput = GetInputAxisValue("MoveRight");
+		const FVector rightVector = GetActorRightVector();
+
+		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
+		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
+
+		// Get dash velocity
+		const FVector dashVelocity = PlayerInventory->HasDashBoots ? kUpgradedDashVelocity : kBaseDashVelocity / 2.0;
+
 		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
-		movementComponent->Launch(dashDirection * dashVector);
+		movementComponent->Launch(dashDirection *  dashVelocity);
 		// Set the dash last used time
 		dashLastUsed = currentTime;
 	}
@@ -149,10 +158,43 @@ void APlayerCharacter::Dash() {
 
 void APlayerCharacter::Weapon1() {
 	WeaponType = 1;
+	FireCooldown = .3;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon2() {
 	WeaponType = 2;
+	//temp solution to slow down fire rate of other guns. allows player to swap and fire rapidly.
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
+}
+
+void APlayerCharacter::Weapon3() {
+	WeaponType = 3;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
+}
+
+void APlayerCharacter::Weapon4() {
+	WeaponType = 4;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
+}
+
+void APlayerCharacter::Weapon5() {
+	WeaponType = 5;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
+}
+
+void APlayerCharacter::Weapon6() {
+	WeaponType = 6;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
+}
+
+void APlayerCharacter::Weapon7() {
+	WeaponType = 7;
 }
 
 void APlayerCharacter::Interact() {
@@ -188,8 +230,9 @@ void APlayerCharacter::AwayDoor(ADoor* someDoor) {
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     check(PlayerInputComponent);
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-    PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+		// Commented out till our level design makes jump a necessity
+    //PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+    //PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
     PlayerInputComponent->BindAction("FirePrimary", IE_Pressed, this, &APlayerCharacter::OnFire);
     PlayerInputComponent->BindAction("FirePrimary", IE_Released, this, &APlayerCharacter::OnStopFire);
@@ -201,6 +244,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction("Weapon1", IE_Pressed, this, &APlayerCharacter::Weapon1);
 	PlayerInputComponent->BindAction("Weapon2", IE_Pressed, this, &APlayerCharacter::Weapon2);
+	PlayerInputComponent->BindAction("Weapon3", IE_Pressed, this, &APlayerCharacter::Weapon3);
+	PlayerInputComponent->BindAction("Weapon4", IE_Pressed, this, &APlayerCharacter::Weapon4);
+	PlayerInputComponent->BindAction("Weapon5", IE_Pressed, this, &APlayerCharacter::Weapon5);
+	PlayerInputComponent->BindAction("Weapon6", IE_Pressed, this, &APlayerCharacter::Weapon6);
+	PlayerInputComponent->BindAction("Weapon7", IE_Pressed, this, &APlayerCharacter::Weapon7);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 
