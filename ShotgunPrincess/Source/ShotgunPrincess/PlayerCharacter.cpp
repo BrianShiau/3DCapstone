@@ -7,8 +7,8 @@
 #include "Door.h"
 
 namespace {
-	const FVector kBaseDashVelocity = FVector(2000, 2000, 0);
-	const FVector kUpgradedDashVelocity = FVector(4000, 4000, 0);
+	const FVector kBaseDashVelocity = FVector(3000, 3000, 0);
+	const FVector kUpgradedDashVelocity = 2 * kBaseDashVelocity;
 	const float dashCooldown = 1.0f;
 }
 
@@ -141,7 +141,7 @@ void APlayerCharacter::Dash() {
 		const float rightInput = GetInputAxisValue("MoveRight");
 		const FVector rightVector = GetActorRightVector();
 
-		// Combine forward and side vectors with their scalars
+		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
 		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
 
 		// Get dash velocity
