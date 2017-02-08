@@ -46,9 +46,11 @@ void ADoor::Tick( float DeltaTime )
 	OpenDoor();
 	
 	if (Interactor != NULL) {
+		
 		float distance = (Interactor->GetActorLocation() - this->GetActorLocation()).SizeSquared();
-		if (distance < 0.0f) distance = -1 * distance;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("The distance between door and player is %d"), distance));
+		//if (distance > 50000.f) Interactor->AwayDoor(this);
+		//else Interactor->NearDoor(this);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("The distance between door and player is %f"), distance));
 	}
 
 }
@@ -102,6 +104,7 @@ void ADoor::OpenDoor() {
 
 bool ADoor::Openable() {
 	bool keyFound = false;
+	bool distanceOK = false;
 	if (Interactor != NULL) {
 		/*Conversion of Door Name to Key Name. Door1 -> Key1*/
 		//FName to FString to std::string
@@ -120,6 +123,13 @@ bool ADoor::Openable() {
 		UPlayerInventory* inventory = Interactor->getInventory();
 		keyFound = inventory->HasKey(keyName);
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString(cKeyName.c_str()));
+
+		float distance = (Interactor->GetActorLocation() - this->GetActorLocation()).SizeSquared();
+		if (distance < 50000.f) {
+			
+			distanceOK = true;
+		}
+		else Interactor->AwayDoor(this);
 	}
-	return needsKey == false || keyFound;
+	return (needsKey == false && distanceOK) || (keyFound && distanceOK);
 }

@@ -218,8 +218,9 @@ void APlayerCharacter::NearDoor(ADoor* someDoor) {
 }
 
 void APlayerCharacter::AwayDoor(ADoor* someDoor) {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "AwayDoor is called");
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "AwayDoor is called");
 	isNearDoor = false;
+	isOpeningDoor = false;
 	if (someDoor != NULL) {
 
 		aDoor = someDoor;
