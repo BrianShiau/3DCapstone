@@ -45,13 +45,13 @@ void ADoor::Tick( float DeltaTime )
 
 	OpenDoor();
 	
-	if (Interactor != NULL) {
+	/*if (Interactor != NULL) {
 		
 		float distance = (Interactor->GetActorLocation() - this->GetActorLocation()).SizeSquared();
-		//if (distance > 50000.f) Interactor->AwayDoor(this);
-		//else Interactor->NearDoor(this);
+		if (distance > 50000.f) Interactor->AwayDoor(this);
+		else Interactor->NearDoor(this);
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("The distance between door and player is %f"), distance));
-	}
+	}*/
 
 }
 
