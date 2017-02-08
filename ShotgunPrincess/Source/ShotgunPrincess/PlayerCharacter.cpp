@@ -165,11 +165,19 @@ void APlayerCharacter::Interact() {
 }
 
 void APlayerCharacter::NearDoor(ADoor* someDoor) {
-	//TODO: Change text
 	bool branchText = someDoor->Openable();
 	if(branchText) GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, "Press 'F' to Open the Door");
 	else GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, "Find the Key for this Door");
 	isNearDoor = true;
+	if (someDoor != NULL) {
+
+		aDoor = someDoor;
+	}
+}
+
+void APlayerCharacter::AwayDoor(ADoor* someDoor) {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "AwayDoor is called");
+	isNearDoor = false;
 	if (someDoor != NULL) {
 
 		aDoor = someDoor;

@@ -103,6 +103,9 @@ public:
 	//Called when player is near a door
 	void NearDoor(ADoor* someDoor);
 
+	//Called when player is near a door
+	void AwayDoor(ADoor* someDoor);
+
   // Called for vertical input
   void MoveForward(float Value);
 

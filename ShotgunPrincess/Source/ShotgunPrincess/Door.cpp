@@ -14,7 +14,6 @@ ADoor::ADoor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	isOpen = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +32,7 @@ void ADoor::BeginPlay()
 	StaticMeshComponent->OnComponentHit.AddDynamic(this, &ADoor::OnHit);
 	StaticMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ADoor::OnOverlapBegin);
 	StaticMeshComponent->OnComponentEndOverlap.AddDynamic(this, &ADoor::OnOverlapEnd);
+
 	//GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, FString::Printf(TEXT("Component #%d"), i));
 	
 	
@@ -45,6 +45,11 @@ void ADoor::Tick( float DeltaTime )
 
 	OpenDoor();
 	
+	if (Interactor != NULL) {
+		float distance = (Interactor->GetActorLocation() - this->GetActorLocation()).SizeSquared();
+		if (distance < 0.0f) distance = -1 * distance;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("The distance between door and player is %d"), distance));
+	}
 
 }
 

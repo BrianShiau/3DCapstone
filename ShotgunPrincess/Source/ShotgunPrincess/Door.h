@@ -36,6 +36,10 @@ class SHOTGUNPRINCESS_API ADoor : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float zTranslate;
 
+	// Door overlap range
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* DoorSphere;
+
 
 public:
 	// Sets default values for this actor's properties
