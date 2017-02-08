@@ -158,26 +158,39 @@ void APlayerCharacter::Dash() {
 
 void APlayerCharacter::Weapon1() {
 	WeaponType = 1;
+	FireCooldown = .3;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon2() {
 	WeaponType = 2;
+	//temp solution to slow down fire rate of other guns. allows player to swap and fire rapidly.
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon3() {
 	WeaponType = 3;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon4() {
 	WeaponType = 4;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon5() {
 	WeaponType = 5;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon6() {
 	WeaponType = 6;
+	FireCooldown = 1;
+	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Weapon7() {
