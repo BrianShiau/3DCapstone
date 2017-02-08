@@ -25,6 +25,16 @@ class SHOTGUNPRINCESS_API ADoor : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FName doorName;
 
+	// 3 modifers to change inside Blueprint in order to open door in a specific direction
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float xTranslate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float yTranslate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float zTranslate;
 
 
 public:
