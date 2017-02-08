@@ -7,9 +7,9 @@
 #include "Door.h"
 
 namespace {
-	const FVector kBaseDashVector = FVector(0, 4000, 0);
-	const FVector kUpgradedDashVector = FVector(0, 8000, 0);
-	const float dashCooldown = 2.0f;
+	const FVector kBaseDashVelocity = FVector(2000, 2000, 0);
+	const FVector kUpgradedDashVelocity = FVector(4000, 4000, 0);
+	const float dashCooldown = 1.0f;
 }
 
 // Sets default values
@@ -127,20 +127,28 @@ void APlayerCharacter::OnStopFire() {
 }
 
 void APlayerCharacter::Dash() {
-
-	const APlayerController* playerController = Cast<APlayerController>(GetController());
+	if ( nullptr == InputComponent || nullptr == GetController() )
+		return;
 	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
-	if (nullptr != InputComponent && nullptr != playerController && currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
-		// Grab Y velocity and clamp it to -1.0f < x < 1.0f;
-		const float dashDirection = FMath::Clamp(GetVelocity().Y, -1.0f, 1.0f);
-		// Check if player has dash upgrade
-		const bool hasDashUpgrade = PlayerInventory->HasDashBoots;
-		// If has dash upgrade, use upgraded dash vector, else use base dash vector
-		const FVector dashVector = hasDashUpgrade ? kUpgradedDashVector : kBaseDashVector;
+	if ( currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround() ) {
+
+		// Grab Forward/Backward movement direction and vals
+		const float forwardInput = GetInputAxisValue("MoveForward");
+		const FVector forwardVector = GetActorForwardVector();
+		// Grab Left/Right movement direction and vals
+		const float rightInput = GetInputAxisValue("MoveRight");
+		const FVector rightVector = GetActorRightVector();
+
+		// Combine forward and side vectors with their scalars
+		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
+
+		// Get dash velocity
+		const FVector dashVelocity = PlayerInventory->HasDashBoots ? kUpgradedDashVelocity : kBaseDashVelocity;
+
 		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
-		movementComponent->Launch(dashDirection * dashVector);
+		movementComponent->Launch(dashDirection *  dashVelocity);
 		// Set the dash last used time
 		dashLastUsed = currentTime;
 	}
