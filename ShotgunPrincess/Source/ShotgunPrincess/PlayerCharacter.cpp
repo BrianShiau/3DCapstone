@@ -142,6 +142,10 @@ void APlayerCharacter::Dash() {
 		const float rightInput = GetInputAxisValue("MoveRight");
 		const FVector rightVector = GetActorRightVector();
 
+		// If the player isn't moving, return before launching the player or setting the cooldown
+		if (forwardInput == 0 && rightInput == 0)
+			return;
+
 		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
 		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
 
