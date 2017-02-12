@@ -203,11 +203,11 @@ void APlayerCharacter::Weapon7() {
 
 void APlayerCharacter::Interact() {
 
-	if (isNearDoor) {
+	//if (isNearDoor) {
 		// Open the Door
-		isOpeningDoor = true;
-		isNearDoor = false;
-	}
+		//isOpeningDoor = true;
+		
+	//}
 }
 
 void APlayerCharacter::NearDoor(ADoor* someDoor) {
@@ -255,7 +255,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Weapon6", IE_Pressed, this, &APlayerCharacter::Weapon6);
 	PlayerInputComponent->BindAction("Weapon7", IE_Pressed, this, &APlayerCharacter::Weapon7);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
+	//PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 
     // turn is for mouse
     // turn rate is for joystick
