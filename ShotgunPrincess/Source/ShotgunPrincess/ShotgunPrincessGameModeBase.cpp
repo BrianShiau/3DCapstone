@@ -12,5 +12,8 @@ AShotgunPrincessGameModeBase::AShotgunPrincessGameModeBase() {
     } else {
         UE_LOG(LogTemp, Log, TEXT("ERROR, Default Pawn Class Not Found"));
     }
+
+	static ConstructorHelpers::FObjectFinder<UClass> HUDFinder(TEXT("/Game/BluePrintSource/HUD/MainHUD.MainHUD_C"));
+	HUDClass = (UClass *)HUDFinder.Object;
 }
 
