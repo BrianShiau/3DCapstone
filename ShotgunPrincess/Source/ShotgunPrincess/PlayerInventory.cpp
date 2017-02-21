@@ -25,3 +25,11 @@ void UPlayerInventory::AddKey(FName keyName)
 bool UPlayerInventory::HasKey(FName keyName) const {
 	return keys.Contains(keyName);
 }
+
+bool UPlayerInventory::KeyRequirementMet(int NeededKeys) const {
+	return keys.Num() >= NeededKeys;
+}
+
+int UPlayerInventory::NumKeys() const {
+	return keys.Num();
+}
