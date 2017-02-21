@@ -11,11 +11,13 @@ class SHOTGUNPRINCESS_API UPlayerInventory : public UActorComponent
 {
 private:
 	GENERATED_BODY()
-	class TSet<FName> keys;
+	class TArray<FName> keys;
 
 public:	
 	// Sets default values for this component's properties
 	UPlayerInventory();
+
+	void ResetInventory();
 
 	// If the Player has the Dash Boots
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -27,5 +29,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="C++")
 	bool HasKey(FName keyName) const;
 
-	void ResetInventory();
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	bool KeyRequirementMet(int NeededKeys) const;
+
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	int NumKeys() const;
+
+	
 };
