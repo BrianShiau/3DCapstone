@@ -7,9 +7,9 @@
 #include "Door.h"
 
 namespace {
-	const FVector kBaseDashVelocity = FVector(3000, 3000, 0);
-	const FVector kUpgradedDashVelocity = 2 * kBaseDashVelocity;
-	const float dashCooldown = 1.0f;
+	const FVector kDashVelocity = FVector(7000, 7000, 0);
+	const float kDashCooldown = 1.25f;
+	const float kUpgradedDashCooldown = 0.75f;
 }
 
 // Sets default values
@@ -133,6 +133,7 @@ void APlayerCharacter::Dash() {
 	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
+	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
 	if ( currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround() ) {
 
 		// Grab Forward/Backward movement direction and vals
@@ -149,11 +150,8 @@ void APlayerCharacter::Dash() {
 		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
 		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
 
-		// Get dash velocity
-		const FVector dashVelocity = PlayerInventory->HasDashBoots ? kUpgradedDashVelocity : kBaseDashVelocity / 2.0;
-
 		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
-		movementComponent->Launch(dashDirection *  dashVelocity);
+		movementComponent->Launch(dashDirection *  kDashVelocity);
 		// Set the dash last used time
 		dashLastUsed = currentTime;
 	}
