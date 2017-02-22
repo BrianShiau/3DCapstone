@@ -12,7 +12,7 @@ UPlayerInventory::UPlayerInventory()
 
 void UPlayerInventory::ResetInventory()
 {
-	HasDashBoots = false;
+	HasDashBoots = true;
 	keys.Empty();
 }
 
