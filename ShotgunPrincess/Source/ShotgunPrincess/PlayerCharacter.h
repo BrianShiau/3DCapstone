@@ -25,11 +25,11 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 
 	// The Player's Health
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int Health;
+	float Health;
 
 	// The Player's Max Health
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int MaxHealth;
+	float MaxHealth;
 
 	// Time player since the player last lost health
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -144,7 +144,7 @@ public:
 
 	// Causes the Player to take damage
   UFUNCTION(BlueprintCallable, Category="Attack")
-  void PlayerTakeDamage(int damage);
+  void PlayerTakeDamage(float damage);
 
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;

@@ -266,7 +266,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 }
 
 // Causes the Player to take damage
-void APlayerCharacter::PlayerTakeDamage(int damage) {
+void APlayerCharacter::PlayerTakeDamage(float damage) {
 	//UE_LOG(LogTemp, Warning, TEXT("Health: %d"), Health);
 	Health -= damage;
 	TimeSinceHealthLoss = 0;
