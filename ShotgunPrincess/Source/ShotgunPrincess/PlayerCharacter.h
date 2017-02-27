@@ -47,6 +47,18 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool Firing;
 
+	// Time shield last fired
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float ShieldLastFired;
+
+	// Time until shield can be fired again
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float ShieldFireCooldown;
+
+	// Whether the player is currently firing the shield (has pushed the shield button)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool ShieldFiring;
+
 	// Time player last used dash
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float dashLastUsed;

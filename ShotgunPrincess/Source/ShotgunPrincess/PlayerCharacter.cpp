@@ -75,6 +75,11 @@ APlayerCharacter::APlayerCharacter()
 	LastFired = -FireCooldown - 1;
 	Firing = false;
 
+	// Set Time between shields
+	ShieldFireCooldown = 3;
+	ShieldLastFired = -FireCooldown - 1;
+	ShieldFiring = false;
+
 	// Set default weapon type
 	WeaponType = 0;
 	PreviousWeaponType = 0;
@@ -205,7 +210,7 @@ void APlayerCharacter::SwapToWeapon(int weaponNum) {
 }
 
 void APlayerCharacter::Shield() {
-	WeaponType = 7;
+	ShieldFiring = true;
 }
 
 void APlayerCharacter::SwapWeapons() {
