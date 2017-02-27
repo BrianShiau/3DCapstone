@@ -77,6 +77,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Set default weapon type
 	WeaponType = 0;
+	PreviousWeaponType = 0;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -159,44 +160,56 @@ void APlayerCharacter::Dash() {
 }
 
 void APlayerCharacter::Weapon1() {
-	WeaponType = 1;
-	FireCooldown = .3;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(1);
 }
 
 void APlayerCharacter::Weapon2() {
-	WeaponType = 2;
-	//temp solution to slow down fire rate of other guns. allows player to swap and fire rapidly.
-	FireCooldown = 1;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(2);
 }
 
 void APlayerCharacter::Weapon3() {
-	WeaponType = 3;
-	FireCooldown = 1;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(3);
 }
 
 void APlayerCharacter::Weapon4() {
-	WeaponType = 4;
-	FireCooldown = 1;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(4);
 }
 
 void APlayerCharacter::Weapon5() {
-	WeaponType = 5;
-	FireCooldown = 1;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(5);
 }
 
 void APlayerCharacter::Weapon6() {
-	WeaponType = 6;
-	FireCooldown = 1;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(6);
 }
 
 void APlayerCharacter::Weapon7() {
+	SwapToWeapon(7);
+}
+
+void APlayerCharacter::SwapToWeapon(int weaponNum) {
+	if (weaponNum != WeaponType) {
+		PreviousWeaponType = WeaponType;
+	}
+	WeaponType = weaponNum;
+	switch (WeaponType) {
+		case 1:
+			FireCooldown = .3;
+			break;
+		default:
+			FireCooldown = 1;
+			break;
+	}
+	//temp solution to slow down fire rate of other guns. allows player to swap and fire rapidly.
+	LastFired = -FireCooldown - 1;
+}
+
+void APlayerCharacter::Shield() {
 	WeaponType = 7;
+}
+
+void APlayerCharacter::SwapWeapons() {
+	SwapToWeapon(PreviousWeaponType);
 }
 
 void APlayerCharacter::Interact() {
@@ -252,6 +265,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Weapon5", IE_Pressed, this, &APlayerCharacter::Weapon5);
 	PlayerInputComponent->BindAction("Weapon6", IE_Pressed, this, &APlayerCharacter::Weapon6);
 	PlayerInputComponent->BindAction("Weapon7", IE_Pressed, this, &APlayerCharacter::Weapon7);
+
+	PlayerInputComponent->BindAction("Shield", IE_Pressed, this, &APlayerCharacter::Shield);
+	PlayerInputComponent->BindAction("SwapWeapons", IE_Pressed, this, &APlayerCharacter::SwapWeapons);
 
 	//PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 

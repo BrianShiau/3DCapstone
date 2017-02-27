@@ -88,6 +88,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int WeaponType;
 
+	// Previous projectile class
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int PreviousWeaponType;
+
   // Called for pressing the fire button
   void OnFire();
 
@@ -141,6 +145,15 @@ public:
 
   // Called when the player wants to switch to the first weapon
   void Weapon1();
+
+  // Helper method for weapon swapping
+  void SwapToWeapon(int weaponType);
+
+  // Called when the player wants to use the shield
+  void Shield();
+
+  // Called when the player wants to swap weapons
+  void SwapWeapons();
 
 	// Causes the Player to take damage
   UFUNCTION(BlueprintCallable, Category="Attack")
