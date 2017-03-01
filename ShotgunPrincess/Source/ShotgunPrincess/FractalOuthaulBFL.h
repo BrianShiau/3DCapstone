@@ -17,5 +17,9 @@ public:
     // returns the rotation necessary to hit a moving target
 	UFUNCTION(BlueprintCallable, Category="AI")
     static FRotator RotationToHit(AActor* firer, AActor* target, float bulletVelocity);
+    
+    // returns the rotation necessary to hit a moving target
+    UFUNCTION(BlueprintCallable, Category="AI")
+    static FRotator RotationToHitFromVector(FVector fireLocation, FVector targetLocation, FVector targetVelocity, float bulletVelocity);
 	
 };
