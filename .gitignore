@@ -56,6 +56,9 @@ ShotgunPrincess/Binaries/*
 # Builds
 ShotgunPrincess/Build/*
 
+# Built data for maps
+*_BuiltData.uasset
+
 # Don't ignore icon files in Build
 !ShotgunPrincess/Build/**/*.ico
 
