@@ -2,15 +2,13 @@
 <Workspace
    version = "1.0">
    <Group
-      location = "container:"
-      name = "Engine">
+      location = "container:"      name = "Engine">
       <FileRef
          location = "group:Intermediate/ProjectFiles/UE4.xcodeproj">
       </FileRef>
    </Group>
    <Group
-      location = "container:"
-      name = "Games">
+      location = "container:"      name = "Games">
       <FileRef
          location = "group:Intermediate/ProjectFiles/ShotgunPrincess.xcodeproj">
       </FileRef>
