@@ -71,8 +71,7 @@ APlayerCharacter::APlayerCharacter()
 	TimeSinceHealthLoss = 100;
 
 	// Set Time between attacks
-	FireCooldown = .3;
-	LastFired = -FireCooldown - 1;
+	SwapToWeapon(1);
 	Firing = false;
 
 	// Set Time between shields
@@ -198,7 +197,7 @@ void APlayerCharacter::SwapToWeapon(int weaponNum) {
 	}
 	WeaponType = weaponNum;
 	switch (WeaponType) {
-		case 1:
+		case 2:
 			FireCooldown = .3;
 			break;
 		default:
