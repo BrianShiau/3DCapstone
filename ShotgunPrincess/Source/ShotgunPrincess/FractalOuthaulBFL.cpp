@@ -35,7 +35,7 @@ FRotator UFractalOuthaulBFL::RotationToHit(AActor* firer, AActor* target, float 
         t = (t1 > t2 && t2 > 0.0f) ? t2 : t1;
     }
     
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity %f %f Time %f"), Vel[0], Vel[1], t));
+    //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity %f %f Time %f"), Vel[0], Vel[1], t));
     
     return UKismetMathLibrary::FindLookAtRotation(Q, P - t * Vel);
 }
@@ -68,7 +68,7 @@ FRotator UFractalOuthaulBFL::RotationToHitFromVector(FVector fireLocation, FVect
         t = (t1 > t2 && t2 > 0.0f) ? t2 : t1;
     }
     
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity %f %f Time %f"), Vel[0], Vel[1], t));
+    //GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity %f %f Time %f"), Vel[0], Vel[1], t));
     
     return UKismetMathLibrary::FindLookAtRotation(Q, P - t * Vel);
 }
