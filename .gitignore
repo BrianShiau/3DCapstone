@@ -73,3 +73,6 @@ ShotgunPrincess/DerivedDataCache/*
 
 # ignore individual debug state and userstate
 ShotgunPrincess/ShotgunPrincess.xcworkspace/xcuserdata/ZackMisso.xcuserdatad/xcdebugger/*
+
+#Wwise Build
+ShotgunPrincess/Plugins/Wwise/Intermediate/Build/*
