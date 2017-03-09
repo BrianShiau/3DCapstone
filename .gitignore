@@ -75,4 +75,5 @@ ShotgunPrincess/DerivedDataCache/*
 ShotgunPrincess/ShotgunPrincess.xcworkspace/xcuserdata/ZackMisso.xcuserdatad/xcdebugger/*
 
 #Wwise Build
-ShotgunPrincess/Plugins/Wwise/Intermediate/Build/*
+ShotgunPrincess/Plugins/Wwise/Intermediate/*
+ShotgunPrincess/Plugins/Wwise/Binaries/*
