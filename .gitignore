@@ -77,3 +77,4 @@ ShotgunPrincess/ShotgunPrincess.xcworkspace/xcuserdata/ZackMisso.xcuserdatad/xcd
 #Wwise Build
 ShotgunPrincess/Plugins/Wwise/Intermediate/*
 ShotgunPrincess/Plugins/Wwise/Binaries/*
+ShotgunPrincess/Plugins/*
