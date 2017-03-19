@@ -22,6 +22,12 @@ void UPlayerInventory::AddKey(FName keyName)
 	//GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, FString::Printf(TEXT("There are %d Keys"), keys.Num()));
 }
 
+void UPlayerInventory::RemoveKey(FName keyName)
+{
+	keys.Remove(keyName);
+	//GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Blue, FString::Printf(TEXT("There are %d Keys"), keys.Num()));
+}
+
 bool UPlayerInventory::HasKey(FName keyName) const {
 	return keys.Contains(keyName);
 }

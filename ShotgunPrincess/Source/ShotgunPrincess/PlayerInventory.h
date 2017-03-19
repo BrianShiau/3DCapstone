@@ -26,6 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="C++")
 	void AddKey(FName keyName);
 
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	void RemoveKey(FName keyName);
+
 	UFUNCTION(BlueprintCallable, Category="C++")
 	bool HasKey(FName keyName) const;
 
