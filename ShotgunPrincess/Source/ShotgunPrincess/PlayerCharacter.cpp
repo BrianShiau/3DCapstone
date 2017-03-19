@@ -45,7 +45,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraBoom->SetRelativeLocation(FVector(0.f, 0.0f, 55.f));
     //CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when character does
 	CameraBoom->bUsePawnControlRotation = false;
-	CameraBoom->bUseControllerViewRotation = true;
+	//CameraBoom->bUseControllerViewRotation = true;
 
     // Create the Camera
     Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -291,7 +291,7 @@ void APlayerCharacter::PlayerTakeDamage(float damage) {
 	Health -= damage;
 	TimeSinceHealthLoss = 0;
 	if (Health <= 0) {
-		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+		//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 	}
 }
 
