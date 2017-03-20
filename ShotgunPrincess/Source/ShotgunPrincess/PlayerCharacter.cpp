@@ -119,9 +119,9 @@ void APlayerCharacter::LookUpAtRate(float Rate) {
 }
 
 void APlayerCharacter::InvertMouseLookUp(float Rate) {
-    if (Rate != 0.f) {
+	if (Rate != 0.f) {
 		AddControllerPitchInput(-1 * Rate);
-    }
+	}
 }
 
 void APlayerCharacter::OnFire() {
@@ -133,13 +133,13 @@ void APlayerCharacter::OnStopFire() {
 }
 
 void APlayerCharacter::Dash() {
-	if ( nullptr == InputComponent || nullptr == GetController() )
+	if (nullptr == InputComponent || nullptr == GetController())
 		return;
 	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
-	if ( currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround() ) {
+	if (currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
 
 		// Grab Forward/Backward movement direction and vals
 		const float forwardInput = GetInputAxisValue("MoveForward");
@@ -192,10 +192,16 @@ void APlayerCharacter::Weapon7() {
 }
 
 void APlayerCharacter::SwapToWeapon(int weaponNum) {
-	if (weaponNum!= 1 && !WeaponsAcquired.IsValidIndex(weaponNum)) {
+	//Since 2 is Shield, offset by 1 for weapons after Shield
+	int weaponNumIndex = 1;
+	if (weaponNum >= 2) {
+		weaponNumIndex = weaponNum+1;
+	}
+
+	if (weaponNumIndex != 1 && !WeaponsAcquired.IsValidIndex(weaponNumIndex)) {
 		return;
 	}
-	if (weaponNum != 1 && !WeaponsAcquired[weaponNum]) {
+	if (weaponNumIndex != 1 && !WeaponsAcquired[weaponNumIndex]) {
 		return;
 	}
 
@@ -204,18 +210,21 @@ void APlayerCharacter::SwapToWeapon(int weaponNum) {
 	}
 	WeaponType = weaponNum;
 	switch (WeaponType) {
-		case 2:
-			FireCooldown = .3;
-			break;
-		default:
-			FireCooldown = 1;
-			break;
+	case 2:
+		FireCooldown = .3;
+		break;
+	default:
+		FireCooldown = 1;
+		break;
 	}
 	//temp solution to slow down fire rate of other guns. allows player to swap and fire rapidly.
 	LastFired = -FireCooldown - 1;
 }
 
 void APlayerCharacter::Shield() {
+	if (!WeaponsAcquired.IsValidIndex(2) || !WeaponsAcquired[2]){
+		return;
+	}
 	ShieldFiring = true;
 }
 
