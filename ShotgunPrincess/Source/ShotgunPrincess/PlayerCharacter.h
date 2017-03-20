@@ -96,6 +96,10 @@ public:
   UPROPERTY(EditAnywhere, BlueprintReadWrite)
   TSubclassOf<class AProjectile> ProjectileClass;
 
+	// 1 = Shotgun, 2 = Pistol, 3 = TBD, 4 = ???, 5 = Shield
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<int> WeaponsAcquired;
+
 	// Projectile class to spawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int WeaponType;

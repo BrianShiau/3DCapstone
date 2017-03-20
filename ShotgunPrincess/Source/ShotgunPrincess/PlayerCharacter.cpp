@@ -192,6 +192,13 @@ void APlayerCharacter::Weapon7() {
 }
 
 void APlayerCharacter::SwapToWeapon(int weaponNum) {
+	if (weaponNum!= 1 && !WeaponsAcquired.IsValidIndex(weaponNum)) {
+		return;
+	}
+	if (weaponNum != 1 && !WeaponsAcquired[weaponNum]) {
+		return;
+	}
+
 	if (weaponNum != WeaponType) {
 		PreviousWeaponType = WeaponType;
 	}
