@@ -71,7 +71,10 @@ APlayerCharacter::APlayerCharacter()
 	TimeSinceHealthLoss = 100;
 
 	// Set Time between attacks
-	SwapToWeapon(1);
+
+	//now done in bp
+	//SwapToWeapon(1);
+	
 	Firing = false;
 
 	// Set Time between shields
@@ -79,8 +82,7 @@ APlayerCharacter::APlayerCharacter()
 	ShieldLastFired = -FireCooldown - 1;
 	ShieldFiring = false;
 
-	// Set default weapon type
-	WeaponType = 0;
+	// Set previous weapon type
 	PreviousWeaponType = 0;
 }
 
@@ -198,15 +200,19 @@ void APlayerCharacter::SwapToWeapon(int weaponNum) {
 		weaponNumIndex = weaponNum+1;
 	}
 
-	if (weaponNumIndex != 1 && !WeaponsAcquired.IsValidIndex(weaponNumIndex)) {
+	if (weaponNumIndex != 0 && !WeaponsAcquired.IsValidIndex(weaponNumIndex)) {
 		return;
 	}
-	if (weaponNumIndex != 1 && !WeaponsAcquired[weaponNumIndex]) {
+	if (weaponNumIndex != 0 && !WeaponsAcquired[weaponNumIndex]) {
 		return;
 	}
-
+	
 	if (weaponNum != WeaponType) {
 		PreviousWeaponType = WeaponType;
+		//disallow the player from swapping to no weapon
+		if (PreviousWeaponType == 0) {
+			PreviousWeaponType = 1;
+		}
 	}
 	WeaponType = weaponNum;
 	switch (WeaponType) {

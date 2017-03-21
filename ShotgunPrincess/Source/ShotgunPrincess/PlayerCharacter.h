@@ -163,7 +163,8 @@ public:
   void Weapon1();
 
   // Helper method for weapon swapping
-  void SwapToWeapon(int weaponType);
+  UFUNCTION(BlueprintCallable, Category = "Weapon")
+  void SwapToWeapon(int weaponNum);
 
   // Called when the player wants to use the shield
   void Shield();
