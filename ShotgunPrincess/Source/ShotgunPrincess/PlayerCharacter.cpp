@@ -7,7 +7,7 @@
 #include "Door.h"
 
 namespace {
-	const FVector kDashVelocity = FVector(7000, 7000, 0);
+	const FVector kDashVelocity = FVector(16000, 16000, 0);
 	const float kDashCooldown = 1.25f;
 	const float kUpgradedDashCooldown = 0.75f;
 }
@@ -84,6 +84,10 @@ APlayerCharacter::APlayerCharacter()
 
 	// Set previous weapon type
 	PreviousWeaponType = 0;
+
+	// Set the player's lateral falling friction to 8.0f, a magic number that produces a
+	// dash distance equal to that of a ground dash
+	GetCharacterMovement()->FallingLateralFriction = 8.0f;
 }
 
 void APlayerCharacter::MoveForward(float Value) {
@@ -145,11 +149,12 @@ void APlayerCharacter::Dash() {
 
 		// Grab Forward/Backward movement direction and vals
 		const float forwardInput = GetInputAxisValue("MoveForward");
-		const FVector forwardVector = GetActorForwardVector();
+		// Get camera forward vector rather than player forward to produce entirely straight movement
+		const FVector forwardVector = GetCamera()->GetForwardVector();;
 		// Grab Left/Right movement direction and vals
 		const float rightInput = GetInputAxisValue("MoveRight");
-		const FVector rightVector = GetActorRightVector();
-
+		// Get camera right vector rather than player right to produce entirely straight movement
+		const FVector rightVector = GetCamera()->GetRightVector();
 		// If the player isn't moving, return before launching the player or setting the cooldown
 		if (forwardInput == 0 && rightInput == 0)
 			return;
@@ -157,8 +162,9 @@ void APlayerCharacter::Dash() {
 		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
 		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
 
-		// Launch the player in the direction they're moving at a force chosen based off of their upgrade status
-		movementComponent->Launch(dashDirection *  kDashVelocity);
+		// Add an impulse to the player rather than launch to avoid triggering fall animation
+		// dashVelocity had to be increased from FVector(6000, 6000, 0) to FVector (16000, 16000, 0)
+		movementComponent->AddImpulse(dashDirection *  kDashVelocity, true);
 		// Set the dash last used time
 		dashLastUsed = currentTime;
 	}
