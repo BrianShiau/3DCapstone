@@ -141,6 +141,9 @@ void APlayerCharacter::OnStopFire() {
 void APlayerCharacter::Dash() {
 	if (nullptr == InputComponent || nullptr == GetController())
 		return;
+	const APlayerController* const p = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!p->WasInputKeyJustPressed(EKeys::SpaceBar) && !p->WasInputKeyJustPressed(EKeys::LeftShift))
+		return;
 	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
