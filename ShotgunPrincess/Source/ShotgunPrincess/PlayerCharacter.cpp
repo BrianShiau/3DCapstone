@@ -175,7 +175,7 @@ void APlayerCharacter::Dash() {
 float APlayerCharacter::DashCooldownPercentageLeft() const {
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
-	return std::max(((currentTime - dashLastUsed) / dashCooldown), 0.0f);
+	return std::min(((currentTime - dashLastUsed) / dashCooldown), 1.0f);
 }
 
 void APlayerCharacter::Weapon1() {
