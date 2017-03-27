@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+	// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ShotgunPrincess.h"
 #include "PlayerCharacter.h"
@@ -173,6 +173,8 @@ void APlayerCharacter::Dash() {
 }
 
 float APlayerCharacter::DashCooldownPercentageLeft() const {
+	if(0.0f == dashLastUsed)
+		return 1.0f;
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
 	return std::min(((currentTime - dashLastUsed) / dashCooldown), 1.0f);
