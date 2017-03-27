@@ -176,8 +176,11 @@ public:
   UFUNCTION(BlueprintCallable, Category="Attack")
   void PlayerTakeDamage(float damage);
 
-	// Called every frame
-	virtual void Tick(float DeltaSeconds) override;
+  // Called every frame
+  virtual void Tick(float DeltaSeconds) override;
+
+  UFUNCTION(BluePrintCallable, Category="Cooldown")
+  float DashCooldownPercentageLeft() const;
 
 
 protected:

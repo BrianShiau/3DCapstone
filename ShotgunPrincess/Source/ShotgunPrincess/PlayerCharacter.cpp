@@ -5,6 +5,7 @@
 #include "Projectile.h"
 #include "PlayerInventory.h"
 #include "Door.h"
+#include <algorithm>
 
 namespace {
 	const FVector kDashVelocity = FVector(16000, 16000, 0);
@@ -169,6 +170,12 @@ void APlayerCharacter::Dash() {
 		dashLastUsed = currentTime;
 	}
 
+}
+
+float APlayerCharacter::DashCooldownPercentageLeft() const {
+	const float currentTime = GetWorld()->GetTimeSeconds();
+	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
+	return std::max(((currentTime - dashLastUsed) / dashCooldown), 0.0f);
 }
 
 void APlayerCharacter::Weapon1() {
