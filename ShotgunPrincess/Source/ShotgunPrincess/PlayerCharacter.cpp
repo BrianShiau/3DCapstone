@@ -80,7 +80,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Set Time between shields
 	ShieldFireCooldown = 3;
-	ShieldLastFired = -FireCooldown - 1;
+	ShieldLastFired = -ShieldFireCooldown - 1;
 	ShieldFiring = false;
 
 	// Set previous weapon type
