@@ -232,7 +232,7 @@ void APlayerCharacter::SwapToWeapon(int weaponNum) {
 	WeaponType = weaponNum;
 	switch (WeaponType) {
 	case 3:
-		FireCooldown = .3;
+		FireCooldown = .175;
 		break;
 	default:
 		FireCooldown = 1;
