@@ -29,4 +29,8 @@ public:
 	// returns if the input int is between the given values
 	UFUNCTION(BlueprintCallable, Category="Utility")
 	static bool IsBetweenInt(int input, int min, int max);
+
+	// returns a random value not including the specified
+	UFUNCTION(BlueprintCallable, Category="Utility")
+	static int RandomIntegerExclude(int max, int exclude);
 };

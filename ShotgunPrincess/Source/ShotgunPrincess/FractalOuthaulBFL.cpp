@@ -82,3 +82,16 @@ bool UFractalOuthaulBFL::IsBetweenInt(int input, int min, int max)
 {
     return input >= min && input <= max;
 }
+
+int UFractalOuthaulBFL::RandomIntegerExclude(int max, int exclude)
+{
+    if (max == 0) return 0;
+
+    int value = FMath::RandRange(0, max);
+    while (value == exclude)
+    {
+        value = FMath::RandRange(0, max);
+    }
+
+    return value;
+}
