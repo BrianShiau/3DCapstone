@@ -7,6 +7,8 @@
 #include "Door.h"
 #include <algorithm>
 
+using namespace std;
+
 namespace {
 	const FVector kDashVelocity = FVector(16000, 16000, 0);
 	const float kDashCooldown = 1.25f;
@@ -75,7 +77,7 @@ APlayerCharacter::APlayerCharacter()
 
 	//now done in bp
 	//SwapToWeapon(1);
-	
+
 	Firing = false;
 
 	// Set Time between shields
@@ -163,8 +165,8 @@ void APlayerCharacter::Dash() {
 		// The amount a user can be moving in a direction and not dash in that direction
 		const float inputMarginOfError = 0.2f;
 		// Modify input axis values to be -1.0f or 1.0f if they're within inputMarginOfError of 0
-		const float clampedForwardInput = ( inputMarginOfError > std::abs(forwardInput) ) ? 0.0f : std::copysign( 1.0f, forwardInput);
-		const float clampedRightInput = ( inputMarginOfError > std::abs(rightInput) ) ? 0.0f : std::copysign( 1.0f, rightInput);
+		const float clampedForwardInput = ( inputMarginOfError > fabs(forwardInput) ) ? 0.0f : copysign( 1.0f, forwardInput);
+		const float clampedRightInput = ( inputMarginOfError > fabs(rightInput) ) ? 0.0f : copysign( 1.0f, rightInput);
 
 		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
 		const FVector dashDirection = (forwardVector * clampedForwardInput) + (clampedRightInput * rightVector);
@@ -227,7 +229,7 @@ void APlayerCharacter::SwapToWeapon(int weaponNum) {
 	if (weaponNumIndex != 0 && !WeaponsAcquired[weaponNumIndex]) {
 		return;
 	}
-	
+
 	if (weaponNum != WeaponType) {
 		PreviousWeaponType = WeaponType;
 		//disallow the player from swapping to no weapon
@@ -264,7 +266,7 @@ void APlayerCharacter::Interact() {
 	//if (isNearDoor) {
 		// Open the Door
 		//isOpeningDoor = true;
-		
+
 	//}
 }
 
