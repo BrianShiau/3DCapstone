@@ -160,8 +160,24 @@ void APlayerCharacter::Dash() {
 		if (forwardInput == 0 && rightInput == 0)
 			return;
 
+
+		UE_LOG(LogTemp, Warning, TEXT("forwardInput: %f"), forwardInput);
+		UE_LOG(LogTemp, Warning, TEXT("rightInput: %f"), rightInput);
+
+
+		// Modify input vals to -1.0f or 1.0f in the case of controllers
+
+		// The amount a user can be moving in a direction and not dash in that direction
+		const float inputMarginOfError = 0.2f;
+		
+		const float clampedForwardInput = ( inputMarginOfError > std::abs(forwardInput) ) ? 0.0f : std::copysign( 1.0f, forwardInput);
+		const float clampedRightInput = ( inputMarginOfError > std::abs(rightInput) ) ? 0.0f : std::copysign( 1.0f, rightInput);
+
+		UE_LOG(LogTemp, Warning, TEXT("forwardInput: %f"), forwardInput);
+		UE_LOG(LogTemp, Warning, TEXT("rightInput: %f"), rightInput);
+
 		// Combine forward and side vectors with their scalars, addition works because they're orthogonal
-		const FVector dashDirection = (forwardVector * forwardInput) + (rightInput * rightVector);
+		const FVector dashDirection = (forwardVector * clampedForwardInput) + (clampedRightInput * rightVector);
 
 		// Add an impulse to the player rather than launch to avoid triggering fall animation
 		// dashVelocity had to be increased from FVector(6000, 6000, 0) to FVector (16000, 16000, 0)
