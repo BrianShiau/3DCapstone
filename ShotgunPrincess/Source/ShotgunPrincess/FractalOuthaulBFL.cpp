@@ -109,3 +109,21 @@ int UFractalOuthaulBFL::RandomIntegerExcludeThree(int max, int excludeOne, int e
 
     return value;
 }
+
+int UFractalOuthaulBFL::RandomIntegerExcludeFour(int max, int excludeOne, int excludeTwo, int excludeThree, int excludeFour)
+{
+    if (max < 3) return 0;
+
+    int value = FMath::RandRange(0, max);
+    while (value == excludeOne || value == excludeTwo || value == excludeThree || value == excludeFour)
+    {
+        value = FMath::RandRange(0, max);
+    }
+
+    return value;
+}
+
+bool UFractalOuthaulBFL::CheckIfAnyEqual(int val, int testOne, int testTwo, int testThree, int testFour, int testFive)
+{
+    return val == testOne || val == testTwo || val == testThree || val == testFour || val == testFive;
+}

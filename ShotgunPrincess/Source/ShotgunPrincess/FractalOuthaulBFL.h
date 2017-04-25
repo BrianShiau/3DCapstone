@@ -37,4 +37,12 @@ public:
 	// returns a random value not including the specified
 	UFUNCTION(BlueprintCallable, Category="Utility")
 	static int RandomIntegerExcludeThree(int max, int excludeOne, int excludeTwo, int excludeThree);
+
+	// returns a random value not including the specified
+	UFUNCTION(BlueprintCallable, Category="Utility")
+	static int RandomIntegerExcludeFour(int max, int excludeOne, int excludeTwo, int excludeThree, int excludeFour);
+
+	// comparisons
+	UFUNCTION(BlueprintCallable, Category="Utility")
+	static bool CheckIfAnyEqual(int val, int testOne, int testTwo, int testThree, int testFour, int testFive);
 };
