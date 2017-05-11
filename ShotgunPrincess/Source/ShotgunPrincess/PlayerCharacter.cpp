@@ -12,7 +12,7 @@ using namespace std;
 namespace {
 	const FVector kDashVelocity = FVector(16000, 16000, 0);
 	const float kDashCooldown = 1.25f;
-	const float kUpgradedDashCooldown = 0.75f;
+	const float kBrokenLegDashCooldown = 0.0f;
 }
 
 // Sets default values
@@ -39,6 +39,10 @@ APlayerCharacter::APlayerCharacter()
     //GetCharacterMovement()->JumpZVelocity = 400.f;
 		GetCharacterMovement()->JumpZVelocity = 0.f;
     GetCharacterMovement()->AirControl = 0.2f;
+	
+	//GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 3;
+	defaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	brokenLeg = false;
 
     // Creates the Camera Boom
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -147,7 +151,7 @@ void APlayerCharacter::Dash() {
 	// Get Player movement component
 	UCharacterMovementComponent* const movementComponent = GetCharacterMovement();
 	const float currentTime = GetWorld()->GetTimeSeconds();
-	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
+	const float dashCooldown = brokenLeg ? kBrokenLegDashCooldown : kDashCooldown;
 	if (currentTime >= dashLastUsed + dashCooldown && movementComponent->IsMovingOnGround()) {
 
 		// Grab Forward/Backward movement direction and vals
@@ -173,7 +177,7 @@ void APlayerCharacter::Dash() {
 
 		// Add an impulse to the player rather than launch to avoid triggering fall animation
 		// dashVelocity had to be increased from FVector(6000, 6000, 0) to FVector (16000, 16000, 0)
-		movementComponent->AddImpulse(dashDirection *  kDashVelocity, true);
+		movementComponent->AddImpulse(dashDirection *  kDashVelocity * !brokenLeg, true);
 		// Set the dash last used time
 		dashLastUsed = currentTime;
 	}
@@ -184,7 +188,7 @@ float APlayerCharacter::DashCooldownPercentageLeft() const {
 	if(0.0f == dashLastUsed)
 		return 1.0f;
 	const float currentTime = GetWorld()->GetTimeSeconds();
-	const float dashCooldown = PlayerInventory->HasDashBoots ? kUpgradedDashCooldown : kDashCooldown;
+	const float dashCooldown = brokenLeg ? kBrokenLegDashCooldown : kDashCooldown;
 	return std::min(((currentTime - dashLastUsed) / dashCooldown), 1.0f);
 }
 
@@ -377,4 +381,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 	//		}
 	//	}
 	//}
+}
+
+void APlayerCharacter::BreakLeg() {
+	brokenLeg = true;
+	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 3;
+}
+
+void APlayerCharacter::HealLeg() {
+	brokenLeg = false;
+	GetCharacterMovement()->MaxWalkSpeed = defaultWalkSpeed;
 }

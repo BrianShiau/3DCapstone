@@ -63,6 +63,12 @@ class SHOTGUNPRINCESS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float dashLastUsed;
 
+	// Default walk speed
+	float defaultWalkSpeed;
+
+	// Is leg broken?
+	bool brokenLeg;
+
 	// Camera Sphere Collider
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USphereComponent* CameraSphere;
@@ -181,6 +187,12 @@ public:
 
   UFUNCTION(BluePrintCallable, Category="Cooldown")
   float DashCooldownPercentageLeft() const;
+
+  UFUNCTION(BluePrintCallable, Category = "EasterEgg")
+	  void BreakLeg();
+
+  UFUNCTION(BluePrintCallable, Category = "EasterEgg")
+	  void HealLeg();
 
 
 protected:
