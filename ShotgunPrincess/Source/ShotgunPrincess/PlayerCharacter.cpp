@@ -189,7 +189,10 @@ float APlayerCharacter::DashCooldownPercentageLeft() const {
 		return 1.0f;
 	const float currentTime = GetWorld()->GetTimeSeconds();
 	const float dashCooldown = brokenLeg ? kBrokenLegDashCooldown : kDashCooldown;
-	return std::min(((currentTime - dashLastUsed) / dashCooldown), 1.0f);
+	if (brokenLeg)
+		return 0.0f;
+	else
+		return std::min(((currentTime - dashLastUsed) / dashCooldown), 1.0f);
 }
 
 void APlayerCharacter::Weapon1() {
