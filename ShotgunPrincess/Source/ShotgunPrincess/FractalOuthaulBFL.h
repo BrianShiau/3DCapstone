@@ -42,6 +42,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Utility")
 	static int RandomIntegerExcludeFour(int max, int excludeOne, int excludeTwo, int excludeThree, int excludeFour);
 
+	// returns a random value not including the specified
+	UFUNCTION(BlueprintCallable, Category="Utility")
+	static int RandomIntegerExcludeFive(int max, int excludeOne, int excludeTwo, int excludeThree, int excludeFour, int excludeFive);
+
+	// returns a random value based on input weights
+	UFUNCTION(BlueprintCallable, Category="Utility")
+	static int RandomIntegerWeightedThree(float weightOne, float weightTwo, float weightThree);
+
 	// comparisons
 	UFUNCTION(BlueprintCallable, Category="Utility")
 	static bool CheckIfAnyEqual(int val, int testOne, int testTwo, int testThree, int testFour, int testFive);
